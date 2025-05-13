@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:quizzie/api/user_data_storage_service.dart';
 import 'package:quizzie/views/pages/access_choice.dart';
-import 'package:quizzie/views/pages/home.dart';
-import 'package:quizzie/views/pages/login_page.dart';
+import 'package:quizzie/views/pages/layout.dart';
 import 'package:quizzie/views/pages/welcome_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,7 +13,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   @override
   void initState() {
     super.initState();
@@ -23,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _cusInit() async {
     final prefs = await SharedPreferences.getInstance();
-    final token = await secureStorage.read(key: 'token');
+    final token = await UserDataStorageService.get('token');
     final hasSeenWelcome = prefs.getBool('hasSeenWelcome') ?? false;
     if (!mounted) return;
     if (!hasSeenWelcome) {
@@ -35,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
     } else if (token != null && token.isNotEmpty) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Home()),
+        MaterialPageRoute(builder: (context) => Layout()),
       );
     } else {
       Navigator.pushReplacement(
