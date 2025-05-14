@@ -9,7 +9,7 @@ class ApiService {
     _dio.options.baseUrl = dotenv.env['BASE_API_URL']!;
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
-        final token = await _storage.read(key: 'authToken');
+        final token = await _storage.read(key: 'token');
         if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
         }

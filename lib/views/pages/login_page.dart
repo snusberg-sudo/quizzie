@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quizzie/api/api_service.dart';
-import 'package:quizzie/views/pages/home.dart';
+import 'package:quizzie/api/user_data_storage_service.dart';
+import 'package:quizzie/views/pages/layout.dart';
 import 'package:quizzie/views/styles/common_input_decoration.dart';
 import 'package:quizzie/views/styles/common_text_styles.dart';
 import 'package:quizzie/views/widgets/outlined_logo_button.dart';
@@ -27,22 +28,19 @@ class _LoginPageState extends State<LoginPage> {
     };
     final apiService = ApiService();
     try {
-      final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
       final response = await apiService.post('/login', requestData);
-      print(response.data);
-      await secureStorage.write(key: 'token', value: response.data['token']);
-      await secureStorage.write(
-        key: 'user_id',
-        value: response.data['user']['id'].toString(),
+      await UserDataStorageService.set('token', response.data['token']);
+      await UserDataStorageService.set(
+        'user_id',
+        response.data['user']['id'].toString(),
       );
-      await secureStorage.write(
-        key: 'email',
-        value: response.data['user']['email'],
-      );
+      await UserDataStorageService.set('email', response.data['user']['email']);
+      await UserDataStorageService.set('name', response.data['user']['name']);
+      if (!mounted) return;
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => Home()),
-        (Route<dynamic> route)=>false,
+        MaterialPageRoute(builder: (context) => Layout()),
+        (Route<dynamic> route) => false,
       );
     } catch (error) {
       print(error);
