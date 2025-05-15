@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:quizzie/api/user_data_storage_service.dart';
+import 'package:quizzie/views/pages/login_page.dart';
 import 'package:quizzie/views/widgets/list_view_navigation.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -84,8 +86,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 {
                   'icon': FontAwesomeIcons.rightFromBracket,
                   'text': "Logout",
-                  'action': (){},
-                  'textColor': Colors.redAccent
+                  'action': () {
+                    UserDataStorageService().clearAuth();
+                    Navigator.of(context).pushAndRemoveUntil(
+                      PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => LoginPage(),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(opacity: animation, child: child,);
+                      },
+                      transitionDuration: Duration(milliseconds: 300)),
+                      (Route<dynamic> route) => false,
+                    );
+                  },
+                  'textColor': Colors.redAccent,
                 },
               ],
             ),
