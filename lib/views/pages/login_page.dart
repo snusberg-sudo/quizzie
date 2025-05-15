@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quizzie/api/api_service.dart';
 import 'package:quizzie/api/user_data_storage_service.dart';
+import 'package:quizzie/views/pages/access_choice.dart';
 import 'package:quizzie/views/pages/layout.dart';
 import 'package:quizzie/views/styles/common_input_decoration.dart';
 import 'package:quizzie/views/styles/common_text_styles.dart';
@@ -29,13 +30,16 @@ class _LoginPageState extends State<LoginPage> {
     final apiService = ApiService();
     try {
       final response = await apiService.post('/login', requestData);
-      await UserDataStorageService.set('token', response.data['token']);
-      await UserDataStorageService.set(
+      await UserDataStorageService().set('token', response.data['token']);
+      await UserDataStorageService().set(
         'user_id',
         response.data['user']['id'].toString(),
       );
-      await UserDataStorageService.set('email', response.data['user']['email']);
-      await UserDataStorageService.set('name', response.data['user']['name']);
+      await UserDataStorageService().set(
+        'email',
+        response.data['user']['email'],
+      );
+      await UserDataStorageService().set('name', response.data['user']['name']);
       if (!mounted) return;
       Navigator.pushAndRemoveUntil(
         context,
@@ -59,7 +63,9 @@ class _LoginPageState extends State<LoginPage> {
           padding: const EdgeInsets.only(left: 20.0),
           child: IconButton.outlined(
             onPressed: () {
-              Navigator.maybePop(context);
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (context) => AccessChoice()));
             },
             icon: Icon(Icons.chevron_left_sharp, size: 28.5),
             style: IconButton.styleFrom(

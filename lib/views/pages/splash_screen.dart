@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _cusInit() async {
     final prefs = await SharedPreferences.getInstance();
-    final token = await UserDataStorageService.get('token');
+    final token = await UserDataStorageService().get('token');
     final hasSeenWelcome = prefs.getBool('hasSeenWelcome') ?? false;
     if (!mounted) return;
     if (!hasSeenWelcome) {

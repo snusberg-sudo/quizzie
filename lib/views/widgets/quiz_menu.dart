@@ -10,6 +10,13 @@ class QuizMenu extends StatefulWidget {
 class _QuizMenuState extends State<QuizMenu> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 12.0),
+      child: Center(
+        child: Column(
+          
+        ),
+      ),
+    );
   }
 }

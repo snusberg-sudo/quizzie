@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:quizzie/api/user_data_storage_service.dart';
 import 'package:quizzie/views/styles/common_appbar_title_style.dart';
 import 'package:quizzie/views/widgets/leaderboard.dart';
@@ -23,8 +24,14 @@ class _LayoutState extends State<Layout> {
     });
   }
 
-  final List<AppBar> _appBars = [
-    AppBar(title: Column(children: [Text("")])),
+  List<AppBar> get _appBars => [
+    AppBar(
+      title: Column(children: [Text("$name", style: GoogleFonts.roboto(color: Colors.white, fontWeight: FontWeight.w700,))]),
+      backgroundColor: Colors.blueAccent.shade100,
+      leading: CircleAvatar(
+        backgroundImage: AssetImage('assets/images/racool.jpg'),
+      ),
+    ),
     AppBar(title: Column(children: [Text("")])),
     AppBar(
       backgroundColor: Colors.white,
@@ -41,14 +48,20 @@ class _LayoutState extends State<Layout> {
   ];
 
   Future<void> _loadUserData() async {
-    final storedName = await UserDataStorageService.get("name");
-    final storedEmail = await UserDataStorageService.get("email");
+    final storedName = await UserDataStorageService().get("name");
+    final storedEmail = await UserDataStorageService().get("email");
 
     setState(() {
       name = storedName;
       email = storedEmail;
     });
   }
+
+  List<Widget> get contentOptions => <Widget>[
+    QuizMenu(),
+    Leaderboard(),
+    ProfilePage(name: name, email: email),
+  ];
 
   @override
   void initState() {
@@ -58,12 +71,6 @@ class _LayoutState extends State<Layout> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> contentOptions = <Widget>[
-      QuizMenu(),
-      Leaderboard(),
-      ProfilePage(name: name, email: email),
-    ];
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: _appBars.elementAt(_selectedIndex),
@@ -85,7 +92,10 @@ class _LayoutState extends State<Layout> {
           selectedItemColor: Colors.indigoAccent,
           items: [
             BottomNavigationBarItem(
-              icon: Padding(padding: EdgeInsets.symmetric(vertical: 25.0),child: FaIcon(FontAwesomeIcons.cubes),),
+              icon: Padding(
+                padding: EdgeInsets.symmetric(vertical: 25.0),
+                child: FaIcon(FontAwesomeIcons.cubes),
+              ),
               label: "",
             ),
             BottomNavigationBarItem(
