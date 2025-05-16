@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quizzie/api/api_service.dart';
 import 'package:quizzie/api/user_data_storage_service.dart';
+import 'package:quizzie/views/pages/quiz_screen.dart';
 import 'package:quizzie/views/widgets/quiz_menu_appbar.dart';
 
 class QuizMenu extends StatefulWidget {
@@ -80,11 +81,21 @@ class _QuizMenuState extends State<QuizMenu> {
               padding: EdgeInsets.symmetric(horizontal: 20.0),
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate((context, index) {
+                  final quizAssignmentId = quizData[index]['quiz']['id'];
                   final quizTitle = quizData[index]['quiz']['title'];
                   final quizDesc = quizData[index]['quiz']['description'];
+                  final qaCount =
+                      quizData[index]['quiz']['questions_count'].toString();
                   return Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(13.0)
+                    ),
                     color: Colors.white,
+                    elevation: 2.0,
                     child: ListTile(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => QuizScreen(quizAsgnId: quizAssignmentId),));
+                      },
                       title: Text(
                         quizTitle,
                         style: GoogleFonts.robotoFlex(
@@ -98,6 +109,21 @@ class _QuizMenuState extends State<QuizMenu> {
                           color: Colors.black38,
                           fontWeight: FontWeight.w600,
                           fontSize: 13.0,
+                        ),
+                      ),
+                      trailing: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.indigoAccent.withValues(alpha: 0.2),
+                            width: 4.25,
+                          ),
+                        ),
+                        child: CircleAvatar(
+                          radius: 18.0,
+                          foregroundColor: Colors.indigoAccent,
+                          backgroundColor: Colors.white24,
+                          child: Text(qaCount, style: GoogleFonts.robotoFlex(fontWeight: FontWeight.w800, fontSize: 15.5)),
                         ),
                       ),
                     ),
