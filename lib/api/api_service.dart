@@ -1,15 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:quizzie/api/user_data_storage_service.dart';
 
 class ApiService {
   final Dio _dio = Dio();
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
   ApiService(){
     _dio.options.baseUrl = dotenv.env['BASE_API_URL']!;
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
-        final token = await _storage.read(key: 'token');
+        final token = await UserDataStorageService().get("token");
         if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
         }

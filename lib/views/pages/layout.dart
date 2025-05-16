@@ -24,28 +24,44 @@ class _LayoutState extends State<Layout> {
     });
   }
 
-  List<AppBar> get _appBars => [
-    AppBar(
-      title: Column(children: [Text("$name", style: GoogleFonts.roboto(color: Colors.white, fontWeight: FontWeight.w700,))]),
-      backgroundColor: Colors.blueAccent.shade100,
-      leading: CircleAvatar(
-        backgroundImage: AssetImage('assets/images/racool.jpg'),
-      ),
-    ),
-    AppBar(title: Column(children: [Text("")])),
-    AppBar(
-      backgroundColor: Colors.white,
-      title: Text("Profile", style: appbarTitleStyle()),
-      centerTitle: true,
-      actionsPadding: EdgeInsets.only(bottom: 3.0),
-      actions: [
-        IconButton(
-          onPressed: () {},
-          icon: FaIcon(FontAwesomeIcons.solidMoon, size: 20.0),
-        ),
-      ],
-    ),
-  ];
+  // List<PreferredSizeWidget> get _appBars => [
+  //   AppBar(
+  //     title: Column(
+  //       children: [
+  //         Text(
+  //           "$name",
+  //           style: GoogleFonts.roboto(
+  //             color: Colors.white,
+  //             fontWeight: FontWeight.w700,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //     backgroundColor: Colors.blueAccent.shade100,
+  //     leading: ClipRRect(
+  //       borderRadius: BorderRadius.circular(8.0),
+  //       child: Image.asset(
+  //         "assets/images/racool.jpg",
+  //         width: 80,
+  //         height: 80,
+  //         fit: BoxFit.cover,
+  //       ),
+  //     ),
+  //   ),
+  //   AppBar(title: Column(children: [Text("")])),
+  //   AppBar(
+  //     backgroundColor: Colors.white,
+  //     title: Text("Profile", style: appbarTitleStyle()),
+  //     centerTitle: true,
+  //     actionsPadding: EdgeInsets.only(bottom: 3.0),
+  //     actions: [
+  //       IconButton(
+  //         onPressed: () {},
+  //         icon: FaIcon(FontAwesomeIcons.solidMoon, size: 20.0),
+  //       ),
+  //     ],
+  //   ),
+  // ];
 
   Future<void> _loadUserData() async {
     final storedName = await UserDataStorageService().get("name");
@@ -58,7 +74,7 @@ class _LayoutState extends State<Layout> {
   }
 
   List<Widget> get contentOptions => <Widget>[
-    QuizMenu(),
+    QuizMenu(name: name),
     Leaderboard(),
     ProfilePage(name: name, email: email),
   ];
@@ -72,8 +88,7 @@ class _LayoutState extends State<Layout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: _appBars.elementAt(_selectedIndex),
+      backgroundColor: Color(0xffeff4fd),
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(splashFactory: NoSplash.splashFactory),
         child: BottomNavigationBar(
@@ -109,9 +124,7 @@ class _LayoutState extends State<Layout> {
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: IndexedStack(index: _selectedIndex, children: contentOptions),
-      ),
+      body: IndexedStack(index: _selectedIndex, children: contentOptions),
     );
   }
 }
