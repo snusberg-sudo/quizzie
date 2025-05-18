@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:quizzie/api/api_service.dart';
 import 'package:quizzie/api/user_data_storage_service.dart';
 import 'package:quizzie/views/pages/quiz_screen.dart';
-import 'package:quizzie/views/widgets/quiz_menu_appbar.dart';
+import 'package:quizzie/views/widgets/my_appbar.dart';
 
 class QuizMenu extends StatefulWidget {
   const QuizMenu({super.key, required this.name});
@@ -37,7 +37,57 @@ class _QuizMenuState extends State<QuizMenu> {
       future: getQuizzies(),
       builder: (context, snapshot) {
         List<Widget> slivers = [];
-        slivers.add(QuizMenuAppbar(title: widget.name));
+        slivers.add(
+          MyAppbar(
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 2.5,
+              children: [
+                Text(
+                  'Hello, ${widget.name}',
+                  style: GoogleFonts.robotoFlex(
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                    fontSize: 22.5,
+                  ),
+                ),
+                Text(
+                  "Let's start your quiz now!",
+                  style: GoogleFonts.robotoFlex(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                    fontSize: 13.5,
+                  ),
+                ),
+              ],
+            ),
+            leading: Padding(
+              padding: EdgeInsets.only(left: 20.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15.0),
+                child: Image.asset(
+                  'assets/images/racool.jpg',
+                  width: 50.0,
+                  height: 50.0,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            actions: [
+              IconButton(
+                onPressed: () {},
+                icon: FaIcon(FontAwesomeIcons.solidBell),
+                color: Colors.white,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.grey.shade100.withValues(alpha: 0.2),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
         slivers.add(
           SliverToBoxAdapter(
             child: Padding(
@@ -88,13 +138,20 @@ class _QuizMenuState extends State<QuizMenu> {
                       quizData[index]['quiz']['questions_count'].toString();
                   return Card(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(13.0)
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
                     color: Colors.white,
                     elevation: 2.0,
                     child: ListTile(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => QuizScreen(quizAsgnId: quizAssignmentId),));
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) =>
+                                    QuizScreen(quizAsgnId: quizAssignmentId),
+                          ),
+                        );
                       },
                       title: Text(
                         quizTitle,
@@ -123,7 +180,13 @@ class _QuizMenuState extends State<QuizMenu> {
                           radius: 18.0,
                           foregroundColor: Colors.indigoAccent,
                           backgroundColor: Colors.white24,
-                          child: Text(qaCount, style: GoogleFonts.robotoFlex(fontWeight: FontWeight.w800, fontSize: 15.5)),
+                          child: Text(
+                            qaCount,
+                            style: GoogleFonts.robotoFlex(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 15.5,
+                            ),
+                          ),
                         ),
                       ),
                     ),
