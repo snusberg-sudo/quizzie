@@ -6,11 +6,17 @@ class MyAppbar extends StatelessWidget {
     required this.title,
     required this.leading,
     required this.actions,
+    this.centerTitle= false,
+    this.expandedHeight = 250.0,
+    this.flexibleSpace,
   });
 
   final Widget? title;
   final List<Widget>? actions;
   final Widget? leading;
+  final bool centerTitle;
+  final double expandedHeight;
+  final Widget? flexibleSpace;
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +29,13 @@ class MyAppbar extends StatelessWidget {
       pinned: true,
       snap: true,
       floating: true,
-      expandedHeight: 250.0,
+      expandedHeight: expandedHeight,
       leadingWidth: 75.0,
       leading: leading,
-      flexibleSpace: FlexibleSpaceBar(title: Text('')),
+      flexibleSpace: flexibleSpace,
       actions: actions,
       actionsPadding: EdgeInsets.only(right: 20.0),
+      centerTitle: centerTitle,
     );
   }
 }

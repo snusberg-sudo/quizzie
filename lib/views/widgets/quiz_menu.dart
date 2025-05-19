@@ -3,7 +3,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quizzie/api/api_service.dart';
 import 'package:quizzie/api/user_data_storage_service.dart';
+import 'package:quizzie/data/models/quiz.dart';
+import 'package:quizzie/views/pages/quiz_confirmation.dart';
 import 'package:quizzie/views/pages/quiz_screen.dart';
+import 'package:quizzie/views/widgets/my_action_icon_button.dart';
 import 'package:quizzie/views/widgets/my_appbar.dart';
 
 class QuizMenu extends StatefulWidget {
@@ -74,16 +77,9 @@ class _QuizMenuState extends State<QuizMenu> {
               ),
             ),
             actions: [
-              IconButton(
-                onPressed: () {},
+              MyActionIconButton(
                 icon: FaIcon(FontAwesomeIcons.solidBell),
-                color: Colors.white,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey.shade100.withValues(alpha: 0.2),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
+                onPressed: () {},
               ),
             ],
           ),
@@ -134,8 +130,7 @@ class _QuizMenuState extends State<QuizMenu> {
                   final quizAssignmentId = quizData[index]['quiz']['id'];
                   final quizTitle = quizData[index]['quiz']['title'];
                   final quizDesc = quizData[index]['quiz']['description'];
-                  final qaCount =
-                      quizData[index]['quiz']['questions_count'].toString();
+                  final qaCount = quizData[index]['quiz']['questions_count'];
                   return Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
@@ -144,13 +139,21 @@ class _QuizMenuState extends State<QuizMenu> {
                     elevation: 2.0,
                     child: ListTile(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder:
-                                (context) =>
-                                    QuizScreen(quizAsgnId: quizAssignmentId),
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(top: Radius.circular(20.0))
                           ),
+                          builder:
+                              (context) => QuizConfirmation(
+                                quiz: Quiz(
+                                  title: quizTitle,
+                                  description: quizDesc,
+                                  questionsCount: qaCount,
+                                  id: quizAssignmentId,
+                                ),
+                              ),
                         );
                       },
                       title: Text(
@@ -181,7 +184,7 @@ class _QuizMenuState extends State<QuizMenu> {
                           foregroundColor: Colors.indigoAccent,
                           backgroundColor: Colors.white24,
                           child: Text(
-                            qaCount,
+                            qaCount.toString(),
                             style: GoogleFonts.robotoFlex(
                               fontWeight: FontWeight.w800,
                               fontSize: 15.5,
