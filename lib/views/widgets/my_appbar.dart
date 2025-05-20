@@ -9,12 +9,13 @@ class MyAppbar extends StatelessWidget {
     this.centerTitle= false,
     this.expandedHeight = 250.0,
     this.flexibleSpace,
+    this.automaticallyImplyLeading = true,
   });
 
   final Widget? title;
   final List<Widget>? actions;
   final Widget? leading;
-  final bool centerTitle;
+  final bool centerTitle, automaticallyImplyLeading;
   final double expandedHeight;
   final Widget? flexibleSpace;
 
@@ -36,6 +37,7 @@ class MyAppbar extends StatelessWidget {
       actions: actions,
       actionsPadding: EdgeInsets.only(right: 20.0),
       centerTitle: centerTitle,
+      automaticallyImplyLeading: automaticallyImplyLeading,
     );
   }
 }

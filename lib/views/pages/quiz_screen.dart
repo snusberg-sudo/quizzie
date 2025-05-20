@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:quizzie/api/api_service.dart';
 import 'package:quizzie/data/models/question.dart';
 import 'package:quizzie/data/models/quiz.dart';
+import 'package:quizzie/views/widgets/my_action_icon_button.dart';
 import 'package:quizzie/views/widgets/my_appbar.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -21,11 +22,23 @@ class _QuizScreenState extends State<QuizScreen> {
   int _currentQuestionIndex = 0;
   bool _isLoading = true;
   bool _hasError = false;
-
+  List<Map> selectedChoices = [];
+  
   @override
   void initState() {
     super.initState();
     _getQuestions();
+  }
+
+  Future<void> _postAnswers() async {
+    print("Hello World!");
+    final apiService = ApiService();
+    try{
+      final response = await apiService.post('/user/quiz-assignments/${widget.quiz.id}/answers', {"answers": selectedChoices});
+      print(response.data);
+    } catch(error){
+      _hasError = true;
+    }
   }
 
   Future<void> _getQuestions() async {
@@ -39,6 +52,10 @@ class _QuizScreenState extends State<QuizScreen> {
         '/user/quiz-assignments/${widget.quiz.id}/questions',
       );
       _questions = response.data['data'][0]['quiz']['questions'];
+      selectedChoices =
+          _questions.map((question) {
+            return {"question_id": question["id"], "choice_id": null};
+          }).toList();
     } catch (error) {
       _hasError = true;
     }
@@ -53,6 +70,7 @@ class _QuizScreenState extends State<QuizScreen> {
         _currentQuestionIndex++;
       });
     } else {
+      
       showDialog(
         context: context,
         builder:
@@ -61,7 +79,7 @@ class _QuizScreenState extends State<QuizScreen> {
               content: Text("You've completed the quiz."),
               actions: [
                 TextButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => _postAnswers(),
                   child: Text("OK"),
                 ),
               ],
@@ -73,8 +91,10 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   Widget build(BuildContext context) {
     final bool hasData = !_isLoading && _questions.isNotEmpty;
-    final question = !_isLoading ? _questions[_currentQuestionIndex] : null;
+    final question = hasData ? _questions[_currentQuestionIndex] : null;
+    final hasChoice = hasData && (selectedChoices[_currentQuestionIndex]['choice_id'] != null);
     return Scaffold(
+      backgroundColor: Color(0xffedf2ff),
       body: CustomScrollView(
         slivers: [
           MyAppbar(
@@ -83,28 +103,17 @@ class _QuizScreenState extends State<QuizScreen> {
             title: Text(
               widget.quiz.title,
               style: GoogleFonts.robotoFlex(
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.bold,
                 color: Colors.white,
-                fontSize: 22.5,
+                fontSize: 23,
               ),
             ),
-            leading: IconButton(
-              onPressed: () {},
-              color: Colors.white,
-              iconSize: 19.0,
-              icon: FaIcon(FontAwesomeIcons.chevronLeft),
-            ),
+            leading: null,
+            automaticallyImplyLeading: false,
             actions: [
-              TextButton(
+              MyActionIconButton(
+                icon: FaIcon(FontAwesomeIcons.xmark),
                 onPressed: () {},
-                child: Text(
-                  "Skip",
-                  style: GoogleFonts.robotoFlex(
-                    fontSize: 17.5,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
@@ -178,12 +187,12 @@ class _QuizScreenState extends State<QuizScreen> {
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
             sliver: SliverToBoxAdapter(
               child: Text(
                 hasData ? question['question_text'] : '',
                 style: GoogleFonts.inter(
-                  fontSize: 30.0,
+                  fontSize: 19.5,
                   fontWeight: FontWeight.bold,
                   color: Colors.black87,
                 ),
@@ -201,12 +210,15 @@ class _QuizScreenState extends State<QuizScreen> {
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     final choice = hasData ? question["choices"][index] : null;
+                    final isChoice =
+                        (hasData &&
+                                _currentQuestionIndex < selectedChoices.length)
+                            ? selectedChoices[_currentQuestionIndex]['choice_id'] == choice['id']
+                            : false;
                     return Card(
-                      color: Colors.indigoAccent.shade200.withValues(
-                        alpha: 0.85,
-                      ),
+                      color: isChoice ? Colors.green.shade500 : Colors.white,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.circular(18.0),
                       ),
                       child: ListTile(
                         contentPadding: EdgeInsets.symmetric(
@@ -217,15 +229,53 @@ class _QuizScreenState extends State<QuizScreen> {
                           hasData ? choice["choice_text"] : "",
                           style: GoogleFonts.inter(
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            fontSize: 30.0
+                            color: isChoice ? Colors.white : Colors.black87,
+                            fontSize: 17.5,
                           ),
                         ),
+                        onTap: () {
+                          setState(() {
+                            selectedChoices[_currentQuestionIndex]['choice_id'] = choice['id'];
+                          });
+                        },
                       ),
                     );
                   },
                 ),
               ),
+            ),
+          ),
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(height: 0),
+                Padding(
+                  padding: EdgeInsets.all(25.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 60.0,
+                    child: FilledButton(
+                      style: FilledButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                      ),
+                      onPressed: () {
+                        _nextQuestion();
+                      },
+                      child: Text(
+                        hasChoice ? "Next" : "Skip",
+                        style: GoogleFonts.inter(
+                          fontSize: 21.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

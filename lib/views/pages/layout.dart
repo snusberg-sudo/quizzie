@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:quizzie/api/user_data_storage_service.dart';
-import 'package:quizzie/views/styles/common_appbar_title_style.dart';
 import 'package:quizzie/views/widgets/leaderboard.dart';
 import 'package:quizzie/views/widgets/profile_page.dart';
 import 'package:quizzie/views/widgets/quiz_menu.dart';
@@ -23,45 +22,6 @@ class _LayoutState extends State<Layout> {
       _selectedIndex = index;
     });
   }
-
-  // List<PreferredSizeWidget> get _appBars => [
-  //   AppBar(
-  //     title: Column(
-  //       children: [
-  //         Text(
-  //           "$name",
-  //           style: GoogleFonts.roboto(
-  //             color: Colors.white,
-  //             fontWeight: FontWeight.w700,
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //     backgroundColor: Colors.blueAccent.shade100,
-  //     leading: ClipRRect(
-  //       borderRadius: BorderRadius.circular(8.0),
-  //       child: Image.asset(
-  //         "assets/images/racool.jpg",
-  //         width: 80,
-  //         height: 80,
-  //         fit: BoxFit.cover,
-  //       ),
-  //     ),
-  //   ),
-  //   AppBar(title: Column(children: [Text("")])),
-  //   AppBar(
-  //     backgroundColor: Colors.white,
-  //     title: Text("Profile", style: appbarTitleStyle()),
-  //     centerTitle: true,
-  //     actionsPadding: EdgeInsets.only(bottom: 3.0),
-  //     actions: [
-  //       IconButton(
-  //         onPressed: () {},
-  //         icon: FaIcon(FontAwesomeIcons.solidMoon, size: 20.0),
-  //       ),
-  //     ],
-  //   ),
-  // ];
 
   Future<void> _loadUserData() async {
     final storedName = await UserDataStorageService().get("name");
@@ -109,7 +69,27 @@ class _LayoutState extends State<Layout> {
             BottomNavigationBarItem(
               icon: Padding(
                 padding: EdgeInsets.symmetric(vertical: 25.0),
-                child: FaIcon(FontAwesomeIcons.cubes),
+                child: SvgPicture.asset(
+                  "assets/icons/menu.svg",
+                  width: 32,
+                  height: 32,
+                  colorFilter: ColorFilter.mode(
+                    Colors.blueGrey[200]!.withValues(alpha: 0.9),
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ),
+              activeIcon: Padding(
+                padding: EdgeInsets.symmetric(vertical: 25.0),
+                child: SvgPicture.asset(
+                  "assets/icons/menu.svg",
+                  width: 32,
+                  height: 32,
+                  colorFilter: ColorFilter.mode(
+                    Colors.indigoAccent.shade400,
+                    BlendMode.srcIn,
+                  ),
+                ),
               ),
               label: "",
             ),
@@ -118,7 +98,30 @@ class _LayoutState extends State<Layout> {
               label: "",
             ),
             BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.solidUser),
+              icon: Padding(
+                padding: EdgeInsets.symmetric(vertical: 25.0),
+                child: SvgPicture.asset(
+                  "assets/icons/user.svg",
+                  width: 32,
+                  height: 32,
+                  colorFilter: ColorFilter.mode(
+                    Colors.blueGrey[200]!.withValues(alpha: 0.9),
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ),
+              activeIcon: Padding(
+                padding: EdgeInsets.symmetric(vertical: 25.0),
+                child: SvgPicture.asset(
+                  "assets/icons/user.svg",
+                  width: 32,
+                  height: 32,
+                  colorFilter: ColorFilter.mode(
+                    Colors.indigoAccent,
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ),
               label: "",
             ),
           ],

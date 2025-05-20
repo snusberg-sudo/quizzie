@@ -85,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
               widgetsList: [
                 {
                   'icon': FontAwesomeIcons.rightFromBracket,
-                  'text': "Logout",
+                  'text': "ログアウト",
                   'action': () {
                     UserDataStorageService().clearAuth();
                     Navigator.of(context).pushAndRemoveUntil(

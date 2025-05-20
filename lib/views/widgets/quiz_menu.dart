@@ -8,6 +8,7 @@ import 'package:quizzie/views/pages/quiz_confirmation.dart';
 import 'package:quizzie/views/pages/quiz_screen.dart';
 import 'package:quizzie/views/widgets/my_action_icon_button.dart';
 import 'package:quizzie/views/widgets/my_appbar.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class QuizMenu extends StatefulWidget {
   const QuizMenu({super.key, required this.name});
@@ -19,6 +20,7 @@ class QuizMenu extends StatefulWidget {
 }
 
 class _QuizMenuState extends State<QuizMenu> {
+  bool _isLoading = true;
   Future<List<Map<dynamic, dynamic>>> getQuizzies() async {
     final apiService = ApiService();
     try {
@@ -104,8 +106,28 @@ class _QuizMenuState extends State<QuizMenu> {
         );
         if (snapshot.connectionState == ConnectionState.waiting) {
           slivers.add(
-            SliverFillRemaining(
-              child: Center(child: CircularProgressIndicator()),
+            SliverPadding(
+              padding: EdgeInsets.only(top: 0.0, left: 20.0, right: 20.0),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  return Skeletonizer(
+                    enabled: snapshot.connectionState == ConnectionState.waiting,
+                    justifyMultiLineText: true,
+                    effect: PulseEffect(
+                      from: Colors.grey.shade300,
+                      to: Colors.grey.shade100,
+                    ),
+                    child: Card(
+                      color: Colors.white,
+                      child: ListTile(
+                        title: Text("Dummy Text Dummy Text"),
+                        subtitle: Text("Dummy Text Dummy Text Dummy"),
+                        trailing: Icon(Icons.circle),
+                      ),
+                    ),
+                  );
+                }, childCount: 4),
+              ),
             ),
           );
         } else if (snapshot.hasError) {
@@ -140,10 +162,13 @@ class _QuizMenuState extends State<QuizMenu> {
                     child: ListTile(
                       onTap: () {
                         showModalBottomSheet(
+                          backgroundColor: Colors.white,
                           context: context,
                           isScrollControlled: true,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(top: Radius.circular(20.0))
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(20.0),
+                            ),
                           ),
                           builder:
                               (context) => QuizConfirmation(
