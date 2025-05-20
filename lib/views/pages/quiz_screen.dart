@@ -23,7 +23,11 @@ class _QuizScreenState extends State<QuizScreen> {
   bool _isLoading = true;
   bool _hasError = false;
   List<Map> selectedChoices = [];
-  
+  PaintingEffect skeletonEffect = PulseEffect(
+                  from: Colors.grey.shade300,
+                  to: Colors.grey.shade100,
+                );
+
   @override
   void initState() {
     super.initState();
@@ -31,12 +35,14 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   Future<void> _postAnswers() async {
-    print("Hello World!");
     final apiService = ApiService();
-    try{
-      final response = await apiService.post('/user/quiz-assignments/${widget.quiz.id}/answers', {"answers": selectedChoices});
+    try {
+      final response = await apiService.post(
+        '/user/quiz-assignments/${widget.quiz.id}/answers',
+        {"answers": selectedChoices},
+      );
       print(response.data);
-    } catch(error){
+    } catch (error) {
       _hasError = true;
     }
   }
@@ -70,7 +76,6 @@ class _QuizScreenState extends State<QuizScreen> {
         _currentQuestionIndex++;
       });
     } else {
-      
       showDialog(
         context: context,
         builder:
@@ -78,10 +83,7 @@ class _QuizScreenState extends State<QuizScreen> {
               title: Text("Quiz Finished"),
               content: Text("You've completed the quiz."),
               actions: [
-                TextButton(
-                  onPressed: () => _postAnswers(),
-                  child: Text("OK"),
-                ),
+                TextButton(onPressed: () => _postAnswers(), child: Text("OK")),
               ],
             ),
       );
@@ -92,7 +94,9 @@ class _QuizScreenState extends State<QuizScreen> {
   Widget build(BuildContext context) {
     final bool hasData = !_isLoading && _questions.isNotEmpty;
     final question = hasData ? _questions[_currentQuestionIndex] : null;
-    final hasChoice = hasData && (selectedChoices[_currentQuestionIndex]['choice_id'] != null);
+    final hasChoice =
+        hasData &&
+        (selectedChoices[_currentQuestionIndex]['choice_id'] != null);
     return Scaffold(
       backgroundColor: Color(0xffedf2ff),
       body: CustomScrollView(
@@ -130,11 +134,7 @@ class _QuizScreenState extends State<QuizScreen> {
                       child: Skeletonizer(
                         enabled: _isLoading,
                         enableSwitchAnimation: true,
-                        effect: ShimmerEffect(
-                          baseColor: Colors.grey.shade300,
-                          highlightColor: Colors.grey.shade100,
-                          duration: Duration(seconds: 1),
-                        ),
+                        effect: skeletonEffect,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,6 +203,7 @@ class _QuizScreenState extends State<QuizScreen> {
             padding: EdgeInsets.symmetric(horizontal: 20.0),
             sliver: SliverToBoxAdapter(
               child: Skeletonizer(
+                effect: skeletonEffect,
                 enabled: _isLoading,
                 child: ListView.builder(
                   itemCount: hasData ? question['choices'].length : 4,
@@ -213,7 +214,8 @@ class _QuizScreenState extends State<QuizScreen> {
                     final isChoice =
                         (hasData &&
                                 _currentQuestionIndex < selectedChoices.length)
-                            ? selectedChoices[_currentQuestionIndex]['choice_id'] == choice['id']
+                            ? selectedChoices[_currentQuestionIndex]['choice_id'] ==
+                                choice['id']
                             : false;
                     return Card(
                       color: isChoice ? Colors.green.shade500 : Colors.white,
@@ -226,7 +228,9 @@ class _QuizScreenState extends State<QuizScreen> {
                           vertical: 10.0,
                         ),
                         title: Text(
-                          hasData ? choice["choice_text"] : "",
+                          hasData
+                              ? choice["choice_text"]
+                              : "Dummy Text Dummy Text",
                           style: GoogleFonts.inter(
                             fontWeight: FontWeight.bold,
                             color: isChoice ? Colors.white : Colors.black87,
@@ -235,7 +239,8 @@ class _QuizScreenState extends State<QuizScreen> {
                         ),
                         onTap: () {
                           setState(() {
-                            selectedChoices[_currentQuestionIndex]['choice_id'] = choice['id'];
+                            selectedChoices[_currentQuestionIndex]['choice_id'] =
+                                choice['id'];
                           });
                         },
                       ),
