@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:quizzie/api/api_service.dart';
 import 'package:quizzie/data/models/question.dart';
 import 'package:quizzie/data/models/quiz.dart';
+import 'package:quizzie/views/pages/quiz_score.dart';
+import 'package:quizzie/views/widgets/choice_tile.dart';
 import 'package:quizzie/views/widgets/my_action_icon_button.dart';
 import 'package:quizzie/views/widgets/my_appbar.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -24,27 +26,14 @@ class _QuizScreenState extends State<QuizScreen> {
   bool _hasError = false;
   List<Map> selectedChoices = [];
   PaintingEffect skeletonEffect = PulseEffect(
-                  from: Colors.grey.shade300,
-                  to: Colors.grey.shade100,
-                );
+    from: Colors.grey.shade300,
+    to: Colors.grey.shade100,
+  );
 
   @override
   void initState() {
     super.initState();
     _getQuestions();
-  }
-
-  Future<void> _postAnswers() async {
-    final apiService = ApiService();
-    try {
-      final response = await apiService.post(
-        '/user/quiz-assignments/${widget.quiz.id}/answers',
-        {"answers": selectedChoices},
-      );
-      print(response.data);
-    } catch (error) {
-      _hasError = true;
-    }
   }
 
   Future<void> _getQuestions() async {
@@ -76,18 +65,31 @@ class _QuizScreenState extends State<QuizScreen> {
         _currentQuestionIndex++;
       });
     } else {
-      showDialog(
-        context: context,
-        builder:
-            (_) => AlertDialog(
-              title: Text("Quiz Finished"),
-              content: Text("You've completed the quiz."),
-              actions: [
-                TextButton(onPressed: () => _postAnswers(), child: Text("OK")),
-              ],
-            ),
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder:
+              (context) => QuizScore(
+                quizId: widget.quiz.id,
+                selectedChoices: selectedChoices,
+                quizCount: widget.quiz.questionsCount,
+              ),
+        ),
       );
     }
+  }
+
+  String _buttonTextDecider(bool hasChoice) {
+    if (_currentQuestionIndex < _questions.length - 1) {
+      return hasChoice ? "Next" : "Skip";
+    }
+    return "Finish";
+  }
+
+  void _handleChoiceTap(dynamic choiceId) {
+    setState(() {
+      selectedChoices[_currentQuestionIndex]['choice_id'] = choiceId;
+    });
   }
 
   @override
@@ -117,7 +119,9 @@ class _QuizScreenState extends State<QuizScreen> {
             actions: [
               MyActionIconButton(
                 icon: FaIcon(FontAwesomeIcons.xmark),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
@@ -187,7 +191,7 @@ class _QuizScreenState extends State<QuizScreen> {
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
+            padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 25.0),
             sliver: SliverToBoxAdapter(
               child: Text(
                 hasData ? question['question_text'] : '',
@@ -206,6 +210,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 effect: skeletonEffect,
                 enabled: _isLoading,
                 child: ListView.builder(
+                  padding: EdgeInsets.symmetric(vertical: 30.0),
                   itemCount: hasData ? question['choices'].length : 4,
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -217,33 +222,11 @@ class _QuizScreenState extends State<QuizScreen> {
                             ? selectedChoices[_currentQuestionIndex]['choice_id'] ==
                                 choice['id']
                             : false;
-                    return Card(
-                      color: isChoice ? Colors.green.shade500 : Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      child: ListTile(
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 20.0,
-                          vertical: 10.0,
-                        ),
-                        title: Text(
-                          hasData
-                              ? choice["choice_text"]
-                              : "Dummy Text Dummy Text",
-                          style: GoogleFonts.inter(
-                            fontWeight: FontWeight.bold,
-                            color: isChoice ? Colors.white : Colors.black87,
-                            fontSize: 17.5,
-                          ),
-                        ),
-                        onTap: () {
-                          setState(() {
-                            selectedChoices[_currentQuestionIndex]['choice_id'] =
-                                choice['id'];
-                          });
-                        },
-                      ),
+                    return ChoiceTile(
+                      hasData: hasData,
+                      isChoice: isChoice,
+                      choice: choice,
+                      handleTap: () => _handleChoiceTap(choice['id']),
                     );
                   },
                 ),
@@ -257,21 +240,24 @@ class _QuizScreenState extends State<QuizScreen> {
               children: [
                 SizedBox(height: 0),
                 Padding(
-                  padding: EdgeInsets.all(25.0),
+                  padding: EdgeInsets.all(35.0),
                   child: SizedBox(
                     width: double.infinity,
-                    height: 60.0,
+                    height: 55.0,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
                       ),
-                      onPressed: () {
-                        _nextQuestion();
-                      },
+                      onPressed:
+                          !_isLoading
+                              ? () {
+                                _nextQuestion();
+                              }
+                              : null,
                       child: Text(
-                        hasChoice ? "Next" : "Skip",
+                        _buttonTextDecider(hasChoice),
                         style: GoogleFonts.inter(
                           fontSize: 21.0,
                           fontWeight: FontWeight.w600,

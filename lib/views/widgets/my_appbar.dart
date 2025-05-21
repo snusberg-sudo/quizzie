@@ -6,7 +6,7 @@ class MyAppbar extends StatelessWidget {
     required this.title,
     required this.leading,
     required this.actions,
-    this.centerTitle= false,
+    this.centerTitle = false,
     this.expandedHeight = 250.0,
     this.flexibleSpace,
     this.automaticallyImplyLeading = true,
@@ -25,7 +25,9 @@ class MyAppbar extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(22.0)),
       ),
-      backgroundColor: Colors.blueAccent.shade400.withValues(alpha: 0.6),
+      backgroundColor: Color(
+        0xff7e80d8,
+      ), //Colors.blueAccent.shade400.withValues(alpha: 0.6),
       title: title,
       pinned: true,
       snap: true,
