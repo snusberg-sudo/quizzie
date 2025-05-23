@@ -57,7 +57,10 @@ class AccessChoice extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
-                  child: Text("ログイン", style: TextStyle(fontWeight: FontWeight.w700),),
+                  child: Text(
+                    "ログイン",
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
                 ),
                 SizedBox(height: 30.0),
                 OutlinedButton(
@@ -70,7 +73,13 @@ class AccessChoice extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
-                  child: Text("サインアップ", style: TextStyle(color: Colors.indigoAccent, fontWeight: FontWeight.w700)),
+                  child: Text(
+                    "サインアップ",
+                    style: TextStyle(
+                      color: Colors.indigoAccent,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ),
               ],
             ),

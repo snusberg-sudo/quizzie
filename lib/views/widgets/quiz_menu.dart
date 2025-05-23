@@ -25,6 +25,7 @@ class _QuizMenuState extends State<QuizMenu> {
     final apiService = ApiService();
     try {
       final response = await apiService.get('/user/quiz-assignments');
+      print(response.data['data']);
       return List<Map<dynamic, dynamic>>.from(response.data['data']);
     } catch (error) {
       return [];

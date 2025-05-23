@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quizzie/api/user_data_storage_service.dart';
 import 'package:quizzie/views/pages/access_choice.dart';
+import 'package:quizzie/views/pages/ip_config_page.dart';
 import 'package:quizzie/views/pages/layout.dart';
 import 'package:quizzie/views/pages/welcome_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,13 +39,13 @@ class _SplashScreenState extends State<SplashScreen> {
     } else {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => AccessChoice()),
+        MaterialPageRoute(builder: (context) => IpConfigPage()),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: CircularProgressIndicator()));
+    return Scaffold(body: Center(child: CircularProgressIndicator()), backgroundColor: Colors.white,);
   }
 }

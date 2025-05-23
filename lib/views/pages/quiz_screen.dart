@@ -256,13 +256,25 @@ class _QuizScreenState extends State<QuizScreen> {
                                 _nextQuestion();
                               }
                               : null,
-                      child: !_isLoading ? Text(
-                        _buttonTextDecider(hasChoice),
-                        style: GoogleFonts.inter(
-                          fontSize: 21.0,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ) : CircularProgressIndicator(color: Colors.grey.shade100, backgroundColor: Colors.grey.shade300,),
+                      child:
+                          !_isLoading
+                              ? Text(
+                                _buttonTextDecider(hasChoice),
+                                style: GoogleFonts.inter(
+                                  fontSize: 21.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )
+                              : SizedBox(
+                                width: 25,
+                                height: 25,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 3,
+                                  strokeCap: StrokeCap.round,
+                                  color: Colors.grey.shade100,
+                                  backgroundColor: Colors.grey.shade300,
+                                ),
+                              ),
                     ),
                   ),
                 ),

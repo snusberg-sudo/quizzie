@@ -63,9 +63,7 @@ class _LoginPageState extends State<LoginPage> {
           padding: const EdgeInsets.only(left: 20.0),
           child: IconButton.outlined(
             onPressed: () {
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (context) => AccessChoice()));
+              Navigator.pop(context);
             },
             icon: Icon(Icons.chevron_left_sharp, size: 28.5),
             style: IconButton.styleFrom(
