@@ -8,6 +8,7 @@ import 'package:quizzie/views/pages/quiz_confirmation.dart';
 import 'package:quizzie/views/pages/quiz_screen.dart';
 import 'package:quizzie/views/widgets/my_action_icon_button.dart';
 import 'package:quizzie/views/widgets/my_appbar.dart';
+import 'package:quizzie/views/widgets/quiz_menu_tab.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class QuizMenu extends StatefulWidget {
@@ -43,68 +44,6 @@ class _QuizMenuState extends State<QuizMenu> {
       future: getQuizzies(),
       builder: (context, snapshot) {
         List<Widget> slivers = [];
-        slivers.add(
-          MyAppbar(
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 2.5,
-              children: [
-                Text(
-                  'Hello, ${widget.name}',
-                  style: GoogleFonts.robotoFlex(
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                    fontSize: 22.5,
-                  ),
-                ),
-                Text(
-                  "Let's start your quiz now!",
-                  style: GoogleFonts.robotoFlex(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                    fontSize: 13.5,
-                  ),
-                ),
-              ],
-            ),
-            leading: Padding(
-              padding: EdgeInsets.only(left: 20.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15.0),
-                child: Image.asset(
-                  'assets/images/racool.jpg',
-                  width: 50.0,
-                  height: 50.0,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            actions: [
-              MyActionIconButton(
-                icon: FaIcon(FontAwesomeIcons.solidBell),
-                onPressed: () {},
-              ),
-            ],
-          ),
-        );
-        slivers.add(
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20.0,
-                vertical: 25.0,
-              ),
-              child: Text(
-                "Recent Quiz",
-                style: GoogleFonts.robotoFlex(
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 24.0,
-                ),
-              ),
-            ),
-          ),
-        );
         if (snapshot.connectionState == ConnectionState.waiting) {
           slivers.add(
             SliverPadding(
@@ -112,7 +51,8 @@ class _QuizMenuState extends State<QuizMenu> {
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate((context, index) {
                   return Skeletonizer(
-                    enabled: snapshot.connectionState == ConnectionState.waiting,
+                    enabled:
+                        snapshot.connectionState == ConnectionState.waiting,
                     justifyMultiLineText: true,
                     effect: PulseEffect(
                       from: Colors.grey.shade300,
@@ -225,7 +165,60 @@ class _QuizMenuState extends State<QuizMenu> {
             ),
           );
         }
-        return CustomScrollView(slivers: slivers);
+        return NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              MyAppbar(
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 2.5,
+                  children: [
+                    Text(
+                      'Hello, ${widget.name}',
+                      style: GoogleFonts.robotoFlex(
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        fontSize: 22.5,
+                      ),
+                    ),
+                    Text(
+                      "Let's start your quiz now!",
+                      style: GoogleFonts.robotoFlex(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                        fontSize: 13.5,
+                      ),
+                    ),
+                  ],
+                ),
+                leading: Padding(
+                  padding: EdgeInsets.only(left: 20.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15.0),
+                    child: Image.asset(
+                      'assets/images/racool.jpg',
+                      width: 50.0,
+                      height: 50.0,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                actions: [
+                  MyActionIconButton(
+                    icon: FaIcon(FontAwesomeIcons.solidBell),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+            ];
+          },
+          body: Padding(
+            padding: EdgeInsetsGeometry.symmetric(
+              horizontal: 20.0,
+            ),
+            child: QuizMenuTab(snapshot: snapshot,),
+          ),
+        );
       },
     );
     return futureBuilder;
