@@ -21,7 +21,7 @@ class _WelcomePageState extends State<WelcomePage> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('hasSeenWelcome', true);
   }
-
+  
   @override
   Widget build(BuildContext context) {
     final dummyTexts = [

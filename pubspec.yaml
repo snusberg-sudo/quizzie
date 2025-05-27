@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.2.1
+  flutter_riverpod: ^2.6.1
   flutter_secure_storage: ^9.2.4
   flutter_svg: ^2.1.0
   font_awesome_flutter: ^10.8.0
@@ -18,7 +19,7 @@ dependencies:
   http: ^1.4.0
   lottie: ^3.3.1
   shared_preferences: ^2.5.3
-  skeletonizer: ^1.4.3
+  skeletonizer: ^2.0.1
   smooth_page_indicator: ^1.2.1
 
 dev_dependencies:
@@ -27,6 +28,8 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   json_serializable: ^6.9.5
   build_runner: ^2.4.15
+  custom_lint: ^0.7.5
+  riverpod_lint: ^2.6.5
 
 flutter:
   uses-material-design: true

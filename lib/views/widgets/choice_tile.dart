@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ChoiceTile extends StatefulWidget {
-  final bool isChoice;
-  final bool hasData;
+  final bool isChoice, hasData;
   final Map<String, dynamic>? choice;
   final VoidCallback handleTap;
 

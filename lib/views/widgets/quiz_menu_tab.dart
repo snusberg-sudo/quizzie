@@ -1,19 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quizzie/views/widgets/quiz_sliver_list.dart';
 
-class QuizMenuTab extends StatefulWidget {
-  const QuizMenuTab({super.key, required this.snapshot, required this.onRefresh});
-
-  final AsyncSnapshot<List<Map<dynamic, dynamic>>> snapshot;
-  final Future<void> Function() onRefresh;
+class QuizMenuTab extends ConsumerStatefulWidget {
+  const QuizMenuTab({super.key});
 
   @override
-  State<QuizMenuTab> createState() => _QuizMenuTabState();
+  ConsumerState<QuizMenuTab> createState() => _QuizMenuTabState();
 }
 
-class _QuizMenuTabState extends State<QuizMenuTab> {
+class _QuizMenuTabState extends ConsumerState<QuizMenuTab> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -30,8 +26,8 @@ class _QuizMenuTabState extends State<QuizMenuTab> {
           Expanded(
             child: TabBarView(
               children: [
-                Center(child: QuizSliverList(snapshot: widget.snapshot, onRefresh: widget.onRefresh,)),
-                Center(child: Text("History")),
+                Center(child: QuizSliverList(mode: "latest")),
+                Center(child: QuizSliverList(mode: "history")),
               ],
             ),
           ),

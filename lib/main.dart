@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quizzie/views/pages/splash_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
@@ -7,7 +8,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   await dotenv.load(fileName: "assets/.env");
-  runApp(const MainApp());
+  runApp(ProviderScope(child: const MainApp()));
 }
 
 class MainApp extends StatelessWidget {
@@ -24,8 +25,12 @@ class MainApp extends StatelessWidget {
         ),
         useMaterial3: true,
         filledButtonTheme: FilledButtonThemeData(
-          style: ButtonStyle(backgroundColor: WidgetStateProperty.all<Color>(Colors.indigoAccent))
-        )
+          style: ButtonStyle(
+            backgroundColor: WidgetStateProperty.all<Color>(
+              Colors.indigoAccent,
+            ),
+          ),
+        ),
       ),
       home: Scaffold(body: SplashScreen()),
     );
