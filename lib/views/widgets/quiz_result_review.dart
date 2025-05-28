@@ -35,7 +35,6 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
   @override
   Widget build(BuildContext context) {
     final quizResultState = ref.watch(quizResultReviewProvider(widget.quizId));
-    print(quizResultState.items);
 
     Widget buildQuizResult(Map<dynamic, dynamic> quiz, int index) {
       return Skeletonizer(
@@ -62,14 +61,16 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
                             fontSize: 18,
                             letterSpacing: -0.6,
                             color: Colors.black87,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
               ),
+              SizedBox(height: 30.0),
               Expanded(
                 child: ListView.builder(
                   itemBuilder: (context, index) {
                     return ReviewChoiceTile(
+                      isSkipped: quiz['user_choice_id'] == null,
                       isChoice:
                           quiz['user_choice_id'] ==
                           quiz['choices'][index]['id'],
@@ -128,7 +129,7 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
                   ),
                   RichText(
                     text: TextSpan(
-                      text: '2',
+                      text: (currentPage + 1).toString(),
                       style: GoogleFonts.inter(
                         fontSize: 26,
                         fontWeight: FontWeight.w600,
@@ -136,7 +137,7 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
                       ),
                       children: [
                         TextSpan(
-                          text: '/20',
+                          text: '/${quizResultState.items.length}',
                           style: GoogleFonts.inter(
                             fontSize: 24.5,
                             color: Colors.black87,
@@ -158,9 +159,93 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
                   },
                   itemCount: quizResultState.items.length,
                   controller: pageController,
-                  onPageChanged: (value) {},
+                  onPageChanged: (value) {
+                    setState(() {
+                      currentPage = value;
+                    });
+                  },
                 ),
               ),
+              Row(
+                spacing: 20.0,
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () {
+                        pageController.previousPage(
+                          duration: Duration(milliseconds: 450),
+                          curve: Curves.easeInOut,
+                        );
+                      },
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: Size(double.infinity, 45.0),
+                        side: BorderSide(
+                          color: Colors.indigoAccent,
+                          width: 1.5,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14.0),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          FaIcon(
+                            FontAwesomeIcons.chevronLeft,
+                            color: Colors.indigoAccent,
+                            size: 14.0,
+                          ),
+                          Text(
+                            "Previous",
+                            style: GoogleFonts.inter(
+                              color: Colors.indigoAccent,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15.0,
+                              letterSpacing: -0.2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: FilledButton(
+                      onPressed: () {
+                        pageController.nextPage(
+                          duration: Duration(milliseconds: 450),
+                          curve: Curves.easeInOut,
+                        );
+                      },
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: Size(double.infinity, 45.0),
+                        side: BorderSide(
+                          color: Colors.indigoAccent,
+                          width: 1.5,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14.0),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            "Next",
+                            style: GoogleFonts.inter(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 15.0,
+                              letterSpacing: -0.2,
+                            ),
+                          ),
+                          FaIcon(FontAwesomeIcons.chevronRight, size: 14.0),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15.0,)
             ],
           ),
         ),

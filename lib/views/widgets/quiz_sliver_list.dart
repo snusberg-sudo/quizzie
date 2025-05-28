@@ -6,6 +6,7 @@ import 'package:quizzie/data/providers/quiz_data_state.dart';
 import 'package:quizzie/views/pages/quiz_confirmation.dart';
 import 'package:quizzie/views/widgets/quiz_count_circle.dart';
 import 'package:quizzie/views/widgets/quiz_result_review.dart';
+import 'package:quizzie/views/widgets/refreshable_fallback.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class QuizSliverList extends ConsumerWidget {
@@ -21,9 +22,23 @@ class QuizSliverList extends ConsumerWidget {
     );
 
     if (quizDataState.error != null) {
-      return Center(child: Text('Error: ${quizDataState.error}'));
+      return RefreshableFallback(
+        onRefresh: () async {
+          await Future.delayed(Duration.zero, () {
+            ref.read(quizDataProvider.notifier).refreshData();
+          });
+        },
+        text: 'Error: ${quizDataState.error}',
+      );
     } else if (quizItems.isEmpty && !quizDataState.isLoading) {
-      return Center(child: Text('No quizzes found.'));
+      return RefreshableFallback(
+        onRefresh: () async {
+          await Future.delayed(Duration.zero, () {
+            ref.read(quizDataProvider.notifier).refreshData();
+          });
+        },
+        text: 'No quizzies found!',
+      );
     } else {
       List<dynamic> quizData = [];
       String? quizTitle, quizDesc, completedAt;

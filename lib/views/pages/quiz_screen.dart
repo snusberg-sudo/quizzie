@@ -100,7 +100,7 @@ class _QuizScreenState extends State<QuizScreen> {
         hasData &&
         (selectedChoices[_currentQuestionIndex]['choice_id'] != null);
     return Scaffold(
-      backgroundColor: Color(0xffedf2ff),
+      backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: [
           MyAppbar(

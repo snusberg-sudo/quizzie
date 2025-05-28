@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 class MyAppbar extends StatelessWidget {
   const MyAppbar({
     super.key,
-    required this.title,
-    required this.leading,
-    required this.actions,
+    this.title,
+    this.leading,
+    this.actions,
     this.centerTitle = false,
+    this.collapsedHeight = 85.0,
     this.expandedHeight = 250.0,
     this.flexibleSpace,
     this.automaticallyImplyLeading = true,
@@ -16,7 +17,7 @@ class MyAppbar extends StatelessWidget {
   final List<Widget>? actions;
   final Widget? leading;
   final bool centerTitle, automaticallyImplyLeading;
-  final double expandedHeight;
+  final double expandedHeight, collapsedHeight;
   final Widget? flexibleSpace;
 
   @override
@@ -28,13 +29,13 @@ class MyAppbar extends StatelessWidget {
       ),
       backgroundColor: Color(
         0xff7e80d8,
-      ), //Colors.blueAccent.shade400.withValues(alpha: 0.6),
+      ),
       title: title,
       pinned: true,
       floating: false,
       snap: false,
       expandedHeight: expandedHeight,
-      collapsedHeight: 85.0,
+      collapsedHeight: collapsedHeight,
       leadingWidth: 75.0,
       leading: leading,
       flexibleSpace: flexibleSpace,

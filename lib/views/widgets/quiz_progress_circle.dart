@@ -24,7 +24,7 @@ class _QuizProgressCircleState extends State<QuizProgressCircle>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 3),
+      duration: Duration(milliseconds: 1500),
     );
     _progressAnimation = Tween<double>(
       begin: 0.0,
