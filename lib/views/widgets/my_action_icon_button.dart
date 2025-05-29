@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 
 class MyActionIconButton extends StatelessWidget {
-  const MyActionIconButton({super.key, required this.icon, required this.onPressed});
+  const MyActionIconButton({
+    super.key,
+    required this.icon,
+    required this.onPressed,
+    this.borderSide = BorderSide.none,
+    this.borderRadiusGeometry = BorderRadius.zero,
+    this.backgroundColor
+  });
 
   final Widget icon;
   final void Function() onPressed;
+  final BorderSide borderSide;
+  final BorderRadiusGeometry borderRadiusGeometry;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +23,10 @@ class MyActionIconButton extends StatelessWidget {
       icon: icon,
       color: Colors.white,
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.grey.shade100.withValues(alpha: 0.2),
+        backgroundColor: backgroundColor,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: borderRadiusGeometry,
+          side: borderSide,
         ),
       ),
     );

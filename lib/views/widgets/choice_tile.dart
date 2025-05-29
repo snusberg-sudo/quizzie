@@ -5,6 +5,7 @@ class ChoiceTile extends StatefulWidget {
   final bool isChoice, hasData;
   final Map<String, dynamic>? choice;
   final VoidCallback handleTap;
+  final String alphaChoice;
 
   const ChoiceTile({
     super.key,
@@ -12,6 +13,7 @@ class ChoiceTile extends StatefulWidget {
     required this.isChoice,
     required this.choice,
     required this.handleTap,
+    required this.alphaChoice,
   });
 
   @override
@@ -23,19 +25,29 @@ class _ChoiceTileState extends State<ChoiceTile> {
   Widget build(BuildContext context) {
     return Card(
       shadowColor: Colors.transparent,
-      color:
-          widget.isChoice
-              ? Colors.indigoAccent.shade700.withValues(alpha: 0.3)
-              : Colors.grey.shade100,
+      color: widget.isChoice ? Colors.amberAccent.shade400 : Colors.white,
       margin: EdgeInsets.only(bottom: 17.5),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(30.0),
         side:
             widget.isChoice
-                ? BorderSide(color: Colors.indigoAccent, width: 1.5)
-                : BorderSide.none,
+                ? BorderSide(color: Colors.black87, width: 2)
+                : BorderSide(
+                  color: Colors.grey.shade100.withValues(alpha: 0.6),
+                  width: 2,
+                ),
       ),
       child: ListTile(
+        leading: Text(
+          "${widget.alphaChoice}.",
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+            fontSize: 19.5,
+            letterSpacing: -0.6,
+          ),
+        ),
+        splashColor: Colors.transparent,
         minTileHeight: 20.0,
         contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         title: Text(
@@ -43,9 +55,10 @@ class _ChoiceTileState extends State<ChoiceTile> {
               ? widget.choice!["choice_text"]
               : "Dummy Text Dummy Text",
           style: GoogleFonts.inter(
-            fontWeight: FontWeight.bold,
-            color: widget.isChoice ? Colors.indigoAccent.shade400 : Colors.black87,
-            fontSize: 13.5,
+            fontWeight: widget.isChoice ? FontWeight.bold : FontWeight.w500,
+            color: Colors.black87,
+            fontSize: 17.5,
+            letterSpacing: -0.6,
           ),
         ),
         onTap: widget.handleTap,

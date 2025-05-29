@@ -62,6 +62,8 @@ class QuizMenu extends ConsumerWidget {
               MyActionIconButton(
                 icon: FaIcon(FontAwesomeIcons.solidBell),
                 onPressed: () {},
+                borderRadiusGeometry: BorderRadius.circular(10.0),
+                backgroundColor: Colors.grey.shade100.withValues(alpha: 0.2),
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(

@@ -18,31 +18,7 @@ class QuizResultMini extends StatelessWidget {
     final displayValue =
         mode == "latest" ? qaCount.toString() : '$score/$qaCount';
     final circularValue = mode == "latest" ? 0.0 : score / qaCount;
-
-    // return Stack(
-    //   alignment: Alignment.center,
-    //   children: [
-    //     SizedBox(
-    //       width: 45,
-    //       height: 45,
-    //       child: CircularProgressIndicator(
-    //         value: circularValue,
-    //         strokeWidth: 3,
-    //         strokeCap: StrokeCap.round,
-    //         backgroundColor: Colors.deepPurple[50]!.withValues(alpha: 0.8),
-    //         valueColor: AlwaysStoppedAnimation(Colors.indigoAccent),
-    //       ),
-    //     ),
-    //     Text(
-    //       displayValue,
-    //       style: GoogleFonts.inter(
-    //         fontSize: 13,
-    //         fontWeight: FontWeight.bold,
-    //         color: Colors.indigoAccent,
-    //       ),
-    //     ),
-    //   ],
-    // );
+    
     return SizedBox(
       width: 30,
       height: 100,

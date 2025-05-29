@@ -6,7 +6,7 @@ import 'package:quizzie/data/models/quiz.dart';
 import 'package:quizzie/data/providers/quiz_data_state.dart';
 import 'package:quizzie/views/pages/quiz_confirmation.dart';
 import 'package:quizzie/views/widgets/quiz_result_mini.dart';
-import 'package:quizzie/views/widgets/quiz_result_review.dart';
+import 'package:quizzie/views/pages/quiz_result_review.dart';
 import 'package:quizzie/views/widgets/refreshable_fallback.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 

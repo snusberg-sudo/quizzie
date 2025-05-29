@@ -11,6 +11,7 @@ class MyAppbar extends StatelessWidget {
     this.expandedHeight = 250.0,
     this.flexibleSpace,
     this.automaticallyImplyLeading = true,
+    this.backgroundColor = Colors.indigoAccent
   });
 
   final Widget? title;
@@ -19,14 +20,16 @@ class MyAppbar extends StatelessWidget {
   final bool centerTitle, automaticallyImplyLeading;
   final double expandedHeight, collapsedHeight;
   final Widget? flexibleSpace;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(22.0)),
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(25.0)),
+        side: BorderSide(color: Colors.black87, width: 1.5)
       ),
-      backgroundColor: Colors.indigoAccent,
+      backgroundColor: backgroundColor,
       title: title,
       pinned: true,
       floating: false,

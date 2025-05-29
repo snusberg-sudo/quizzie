@@ -24,6 +24,7 @@ class _QuizScreenState extends State<QuizScreen> {
   int _currentQuestionIndex = 0;
   bool _isLoading = true;
   bool _hasError = false;
+  List alphabeticalIndex = ["A", "B", "C", "D"];
   List<Map> selectedChoices = [];
   PaintingEffect skeletonEffect = PulseEffect(
     from: Colors.grey.shade300,
@@ -100,28 +101,36 @@ class _QuizScreenState extends State<QuizScreen> {
         hasData &&
         (selectedChoices[_currentQuestionIndex]['choice_id'] != null);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.indigoAccent,
       body: CustomScrollView(
         slivers: [
           MyAppbar(
             centerTitle: true,
+            backgroundColor: Colors.amberAccent.shade400,
             expandedHeight: 130.0,
             title: Text(
               widget.quiz.title,
-              style: GoogleFonts.robotoFlex(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontSize: 23,
+              style: GoogleFonts.inter(
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+                fontSize: 18,
+                letterSpacing: -0.6,
               ),
             ),
             leading: null,
             automaticallyImplyLeading: false,
             actions: [
               MyActionIconButton(
-                icon: FaIcon(FontAwesomeIcons.xmark),
+                icon: FaIcon(
+                  FontAwesomeIcons.xmark,
+                  color: Colors.black87,
+                  size: 18.0,
+                ),
                 onPressed: () {
                   Navigator.pop(context);
                 },
+                borderRadiusGeometry: BorderRadiusGeometry.circular(50.0),
+                borderSide: BorderSide(color: Colors.black54, width: 2),
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
@@ -145,6 +154,7 @@ class _QuizScreenState extends State<QuizScreen> {
                           spacing: 7.0,
                           children: [
                             LinearProgressIndicator(
+                              trackGap: 6.0,
                               value:
                                   _isLoading
                                       ? 0
@@ -155,10 +165,10 @@ class _QuizScreenState extends State<QuizScreen> {
                                 alpha: 0.5,
                               ),
                               borderRadius: BorderRadiusDirectional.all(
-                                Radius.circular(20.0),
+                                Radius.circular(25.0),
                               ),
                               valueColor: AlwaysStoppedAnimation(
-                                Colors.indigoAccent,
+                                Colors.white,
                               ),
                             ),
                             RichText(
@@ -196,9 +206,23 @@ class _QuizScreenState extends State<QuizScreen> {
               child: Text(
                 hasData ? question['question_text'] : '',
                 style: GoogleFonts.inter(
-                  fontSize: 19.5,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  fontSize: 26,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                  letterSpacing: -0.5,
+                ),
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 15.0),
+            sliver: SliverToBoxAdapter(
+              child: Text(
+                "Choose your answer",
+                style: GoogleFonts.inter(
+                  color: Colors.grey.shade100.withValues(alpha: 0.8),
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: -0.2
                 ),
               ),
             ),
@@ -210,7 +234,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 effect: skeletonEffect,
                 enabled: _isLoading,
                 child: ListView.builder(
-                  padding: EdgeInsets.symmetric(vertical: 30.0),
+                  padding: EdgeInsets.symmetric(vertical: 15.0),
                   itemCount: hasData ? question['choices'].length : 4,
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -223,6 +247,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                 choice['id']
                             : false;
                     return ChoiceTile(
+                      alphaChoice: alphabeticalIndex.elementAt(index),
                       hasData: hasData,
                       isChoice: isChoice,
                       choice: choice,
@@ -246,8 +271,10 @@ class _QuizScreenState extends State<QuizScreen> {
                     height: 55.0,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
+                        backgroundColor: Colors.amberAccent.shade400,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
+                          borderRadius: BorderRadius.circular(20.0),
+                          side: BorderSide(color: Colors.black87, width: 2),
                         ),
                       ),
                       onPressed:
@@ -258,11 +285,28 @@ class _QuizScreenState extends State<QuizScreen> {
                               : null,
                       child:
                           !_isLoading
-                              ? Text(
-                                _buttonTextDecider(hasChoice),
-                                style: GoogleFonts.inter(
-                                  fontSize: 21.0,
-                                  fontWeight: FontWeight.w600,
+                              ? Padding(
+                                padding: EdgeInsetsGeometry.only(
+                                  right: 10.0,
+                                  left: 15.0,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      _buttonTextDecider(hasChoice),
+                                      style: GoogleFonts.inter(
+                                        fontSize: 21.0,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    FaIcon(
+                                      FontAwesomeIcons.chevronRight,
+                                      color: Colors.black87,
+                                    ),
+                                  ],
                                 ),
                               )
                               : SizedBox(
