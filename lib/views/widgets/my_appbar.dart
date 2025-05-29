@@ -23,13 +23,10 @@ class MyAppbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(22.0)),
       ),
-      backgroundColor: Color(
-        0xff7e80d8,
-      ),
+      backgroundColor: Colors.indigoAccent,
       title: title,
       pinned: true,
       floating: false,

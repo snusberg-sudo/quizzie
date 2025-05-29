@@ -48,7 +48,7 @@ class _LayoutState extends State<Layout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffeff4fd),
+      backgroundColor: Colors.white,
       bottomNavigationBar: ClipRRect(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(30.0)

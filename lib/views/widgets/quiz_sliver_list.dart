@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quizzie/data/models/quiz.dart';
 import 'package:quizzie/data/providers/quiz_data_state.dart';
 import 'package:quizzie/views/pages/quiz_confirmation.dart';
-import 'package:quizzie/views/widgets/quiz_count_circle.dart';
+import 'package:quizzie/views/widgets/quiz_result_mini.dart';
 import 'package:quizzie/views/widgets/quiz_result_review.dart';
 import 'package:quizzie/views/widgets/refreshable_fallback.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -75,12 +76,18 @@ class QuizSliverList extends ConsumerWidget {
                 score = quizData[index]['score'];
               }
               return Card(
+                shadowColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
+                  borderRadius: BorderRadius.circular(20.0),
                 ),
-                color: Colors.white,
-                elevation: 2.0,
+                color: Colors.grey.shade300.withValues(alpha: 0.35),
                 child: ListTile(
+                  contentPadding: EdgeInsets.only(
+                    left: 15.0,
+                    top: 10.0,
+                    bottom: 10.0,
+                    right: 20.0,
+                  ),
                   onTap: () {
                     mode == 'latest'
                         ? showModalBottomSheet(
@@ -115,35 +122,66 @@ class QuizSliverList extends ConsumerWidget {
                           ),
                         );
                   },
+                  leading: AspectRatio(
+                    aspectRatio: 1.0,
+                    child:
+                        !quizDataState.isLoading
+                            ? Container(
+                              width: 75.0,
+                              height: 75.0,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.0),
+                                border: BoxBorder.all(
+                                  color: Colors.amberAccent.shade400,
+                                  width: 2.5,
+                                ),
+                                //color: Colors.amberAccent.shade400,
+                              ),
+                              alignment: Alignment.center,
+                              child: FaIcon(
+                                FontAwesomeIcons.code,
+                                color: Colors.indigoAccent,
+                              ),
+                            )
+                            : Bone.square(
+                              borderRadius: BorderRadius.circular(15.0),
+                              size: 75.0,
+                            ),
+                  ),
                   title:
-                      quizData.isNotEmpty
+                      !quizDataState.isLoading
                           ? Text(
                             quizTitle!,
-                            style: GoogleFonts.robotoFlex(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 17.0,
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 17.5,
+                              letterSpacing: -0.3,
                             ),
                           )
                           : Bone.text(words: 3, fontSize: 17),
                   subtitle:
-                      quizData.isNotEmpty
+                      !quizDataState.isLoading
                           ? Text(
                             quizDesc!,
-                            style: GoogleFonts.robotoFlex(
+                            style: GoogleFonts.inter(
                               color: Colors.black38,
                               fontWeight: FontWeight.w600,
-                              fontSize: 14.0,
+                              fontSize: 12,
+                              letterSpacing: -0.3,
                             ),
                           )
-                          : Bone.text(words: 4, fontSize: 14.0),
+                          : Bone.multiText(fontSize: 12.0, lines: 2,),
                   trailing:
-                      quizData.isNotEmpty
-                          ? QuizCountCircle(
+                      !quizDataState.isLoading
+                          ? QuizResultMini(
                             qaCount: qaCount ?? 0,
                             score: score ?? 0,
                             mode: mode,
                           )
-                          : Bone.circle(size: 36),
+                          : Bone.square(
+                            size: 30,
+                            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                          ),
                 ),
               );
             },

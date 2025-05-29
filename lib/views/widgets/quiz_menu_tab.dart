@@ -17,11 +17,41 @@ class _QuizMenuTabState extends ConsumerState<QuizMenuTab> {
       initialIndex: 0,
       child: Column(
         children: [
-          TabBar(
-            tabs: [
-              Tab(icon: Icon(Icons.quiz_outlined)),
-              Tab(icon: Icon(Icons.history)),
-            ],
+          Container(
+            height: 50.0,
+            decoration: BoxDecoration(
+              color: Colors.grey[350]!.withValues(alpha: 0.5),
+              borderRadius: BorderRadius.horizontal(
+                left: Radius.circular(25.0),
+                right: Radius.circular(25.0),
+              ),
+            ),
+            child: TabBar(
+              dividerColor: Colors.transparent,
+              indicatorPadding: EdgeInsetsGeometry.only(top: 0.1),
+              indicatorSize: TabBarIndicatorSize.tab,
+              splashFactory: NoSplash.splashFactory,
+              overlayColor: WidgetStateColor.resolveWith((Set states) {
+                return Colors.transparent;
+              }),
+              indicator: BoxDecoration(
+                border: BoxBorder.all(
+                  color: Colors.black87,
+                  width: 1.5
+                ),
+                borderRadius: BorderRadius.horizontal(
+                  left: Radius.circular(25.0),
+                  right: Radius.circular(25.0),
+                ),
+                color: Colors.amberAccent.shade400,
+              ),
+              labelColor: Colors.black87,
+              unselectedLabelColor: Colors.grey.withValues(alpha: 0.7),
+              tabs: [
+                Tab(icon: Icon(Icons.quiz_outlined, size: 27.0,)),
+                Tab(icon: Icon(Icons.history, size: 27.0,)),
+              ],
+            ),
           ),
           Expanded(
             child: TabBarView(

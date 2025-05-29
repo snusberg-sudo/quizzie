@@ -6,6 +6,7 @@ import 'package:quizzie/data/providers/quiz_data_state.dart';
 import 'package:quizzie/views/widgets/my_action_icon_button.dart';
 import 'package:quizzie/views/widgets/my_appbar.dart';
 import 'package:quizzie/views/widgets/quiz_menu_tab.dart';
+import 'package:quizzie/views/widgets/quiz_search_bar.dart';
 
 class QuizMenu extends ConsumerWidget {
   const QuizMenu({super.key, required this.name});
@@ -20,24 +21,27 @@ class QuizMenu extends ConsumerWidget {
       headerSliverBuilder: (context, innerBoxIsScrolled) {
         return [
           MyAppbar(
+            expandedHeight: 170,
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 2.5,
               children: [
                 Text(
                   'Hello, $name',
-                  style: GoogleFonts.robotoFlex(
-                    fontWeight: FontWeight.w700,
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w600,
                     color: Colors.white,
                     fontSize: 22.5,
+                    letterSpacing: -0.7
                   ),
                 ),
                 Text(
                   "Let's start your quiz now!",
-                  style: GoogleFonts.robotoFlex(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white70,
                     fontSize: 13.5,
+                    letterSpacing: -0.6
                   ),
                 ),
               ],
@@ -60,11 +64,21 @@ class QuizMenu extends ConsumerWidget {
                 onPressed: () {},
               ),
             ],
+            flexibleSpace: FlexibleSpaceBar(
+              titlePadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 25.0),
+              centerTitle: true,
+              title: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  QuizSearchBar(),
+                ],
+              ),
+            ),
           ),
         ];
       },
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.0),
+        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
         child: QuizMenuTab(),
       ),
     );
