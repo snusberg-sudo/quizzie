@@ -96,7 +96,7 @@ class QuizSliverList extends ConsumerWidget {
                           isScrollControlled: true,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(20.0),
+                              top: Radius.circular(25.0),
                             ),
                           ),
                           builder:
@@ -152,8 +152,8 @@ class QuizSliverList extends ConsumerWidget {
                       !quizDataState.isLoading
                           ? Text(
                             quizTitle!,
-                            style: GoogleFonts.inter(
-                              fontWeight: FontWeight.w700,
+                            style: GoogleFonts.rubik(
+                              fontWeight: FontWeight.w600,
                               fontSize: 17.5,
                               letterSpacing: -0.3,
                             ),
@@ -163,7 +163,7 @@ class QuizSliverList extends ConsumerWidget {
                       !quizDataState.isLoading
                           ? Text(
                             quizDesc!,
-                            style: GoogleFonts.inter(
+                            style: GoogleFonts.rubik(
                               color: Colors.black38,
                               fontWeight: FontWeight.w600,
                               fontSize: 12,

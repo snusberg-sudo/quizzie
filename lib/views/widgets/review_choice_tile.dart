@@ -62,7 +62,7 @@ class ReviewChoiceTile extends StatelessWidget {
         contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         title: Text(
           choice!["choice_text"] ?? "Dummy Text Dummy Text",
-          style: GoogleFonts.inter(
+          style: GoogleFonts.rubik(
             fontWeight: FontWeight.bold,
             color: determineColor(),
             fontSize: 13.5,

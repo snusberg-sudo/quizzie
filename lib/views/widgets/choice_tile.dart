@@ -40,8 +40,8 @@ class _ChoiceTileState extends State<ChoiceTile> {
       child: ListTile(
         leading: Text(
           "${widget.alphaChoice}.",
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.bold,
+          style: GoogleFonts.rubik(
+            fontWeight: FontWeight.w600,
             color: Colors.black87,
             fontSize: 19.5,
             letterSpacing: -0.6,
@@ -54,11 +54,11 @@ class _ChoiceTileState extends State<ChoiceTile> {
           widget.hasData
               ? widget.choice!["choice_text"]
               : "Dummy Text Dummy Text",
-          style: GoogleFonts.inter(
+          style: GoogleFonts.rubik(
             fontWeight: widget.isChoice ? FontWeight.bold : FontWeight.w500,
             color: Colors.black87,
             fontSize: 17.5,
-            letterSpacing: -0.6,
+            letterSpacing: -0.1,
           ),
         ),
         onTap: widget.handleTap,

@@ -62,7 +62,7 @@ class _QuizProgressCircleState extends State<QuizProgressCircle>
             ),
             Text(
               "${widget.completedQuiz}/${widget.totalQuiz}",
-              style: GoogleFonts.inter(
+              style: GoogleFonts.rubik(
                 fontSize: 24.5,
                 fontWeight: FontWeight.bold,
                 color: Colors.indigoAccent,

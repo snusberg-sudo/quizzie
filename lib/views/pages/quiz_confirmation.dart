@@ -24,18 +24,20 @@ class QuizConfirmation extends StatelessWidget {
         children: [
           Text(
             quiz.title,
-            style: GoogleFonts.robotoFlex(
-              fontWeight: FontWeight.bold,
+            style: GoogleFonts.rubik(
+              fontWeight: FontWeight.w600,
               fontSize: 32.0,
+              letterSpacing: -0.7,
             ),
           ),
           SizedBox(height: 10),
           Text(
             quiz.description,
-            style: GoogleFonts.robotoFlex(
+            style: GoogleFonts.rubik(
               fontWeight: FontWeight.w600,
               color: Colors.black54,
               fontSize: 16.0,
+              letterSpacing: -0.4
             ),
           ),
           Lottie.asset('assets/lottie/quiz.json'),
@@ -45,17 +47,19 @@ class QuizConfirmation extends StatelessWidget {
               Expanded(
                 child: FilledButton(
                   style: FilledButton.styleFrom(
+                    backgroundColor: Colors.amberAccent.shade400,
                     minimumSize: Size(0, 55.0),
-                    side: BorderSide.none,
+                    side: BorderSide(color: Colors.black87, width: 1.5),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+                      borderRadius: BorderRadius.circular(18.0),
                     ),
                   ),
                   child: Text(
                     "Start Quiz",
-                    style: GoogleFonts.robotoFlex(
+                    style: GoogleFonts.rubik(
                       fontSize: 19.0,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87
                     ),
                   ),
                   onPressed: () {

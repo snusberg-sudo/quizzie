@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quizzie/data/providers/quiz_data_state.dart';
@@ -28,20 +29,20 @@ class QuizMenu extends ConsumerWidget {
               children: [
                 Text(
                   'Hello, $name',
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.rubik(
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                     fontSize: 22.5,
-                    letterSpacing: -0.7
+                    letterSpacing: -0.7,
                   ),
                 ),
                 Text(
                   "Let's start your quiz now!",
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.rubik(
                     fontWeight: FontWeight.w600,
                     color: Colors.white70,
                     fontSize: 13.5,
-                    letterSpacing: -0.6
+                    letterSpacing: -0.6,
                   ),
                 ),
               ],
@@ -60,20 +61,28 @@ class QuizMenu extends ConsumerWidget {
             ),
             actions: [
               MyActionIconButton(
-                icon: FaIcon(FontAwesomeIcons.solidBell),
+                icon: SvgPicture.asset(
+                  'assets/icons/bell.svg',
+                  colorFilter: ColorFilter.mode(
+                    Colors.white,
+                    BlendMode.srcIn,
+                  ),
+                ),
                 onPressed: () {},
-                borderRadiusGeometry: BorderRadius.circular(10.0),
+                borderRadiusGeometry: BorderRadius.circular(20.0),
+                borderSide: BorderSide(color: Colors.white70, width: 1),
                 backgroundColor: Colors.grey.shade100.withValues(alpha: 0.2),
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
-              titlePadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 25.0),
+              titlePadding: EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 25.0,
+              ),
               centerTitle: true,
               title: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  QuizSearchBar(),
-                ],
+                children: [QuizSearchBar()],
               ),
             ),
           ),

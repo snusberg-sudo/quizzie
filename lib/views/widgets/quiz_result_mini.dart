@@ -27,7 +27,7 @@ class QuizResultMini extends StatelessWidget {
         children: [
           Text(
             score.toString(),
-            style: GoogleFonts.inter(
+            style: GoogleFonts.rubik(
               fontSize: 18.0,
               fontWeight: FontWeight.w700,
               color: Colors.indigoAccent,
@@ -40,7 +40,7 @@ class QuizResultMini extends StatelessWidget {
           ),
           Text(
             qaCount.toString(),
-            style: GoogleFonts.inter(
+            style: GoogleFonts.rubik(
               fontSize: 18.0,
               fontWeight: FontWeight.w700,
               color: Colors.amberAccent.shade400,

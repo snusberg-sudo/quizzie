@@ -42,7 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 SizedBox(height: 5.0),
                 Text(
                   widget.name ?? 'Dummy Name',
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.rubik(
                     fontWeight: FontWeight.w700,
                     fontSize: 18.5,
                     letterSpacing: -0.4,

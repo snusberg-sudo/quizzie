@@ -33,7 +33,7 @@ class _QuizSearchBarState extends State<QuizSearchBar> {
           constraints: BoxConstraints(minHeight: 38.0),
           side: WidgetStatePropertyAll(BorderSide(color: Colors.black87, width: 1.25)),
           backgroundColor: WidgetStatePropertyAll(Colors.amberAccent.shade400),
-          textStyle: WidgetStatePropertyAll(GoogleFonts.inter(fontSize: 12.0)),
+          textStyle: WidgetStatePropertyAll(GoogleFonts.rubik(fontSize: 12.0)),
         );
       },
       suggestionsBuilder: (context, controller) {

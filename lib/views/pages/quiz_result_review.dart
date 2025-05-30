@@ -57,7 +57,7 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
                         ? Bone.text(words: 6, fontSize: 17)
                         : Text(
                           quiz['question_text'],
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.rubik(
                             fontSize: 18,
                             letterSpacing: -0.6,
                             color: Colors.black87,
@@ -103,7 +103,7 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
         backgroundColor: Colors.white,
         title: Text(
           widget.quizTitle,
-          style: GoogleFonts.inter(
+          style: GoogleFonts.rubik(
             color: Colors.black87,
             fontWeight: FontWeight.w600,
           ),
@@ -120,7 +120,7 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
                 children: [
                   Text(
                     "Question",
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.rubik(
                       color: Colors.black87,
                       fontWeight: FontWeight.w700,
                       fontSize: 26.0,
@@ -130,7 +130,7 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
                   RichText(
                     text: TextSpan(
                       text: (currentPage + 1).toString(),
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.rubik(
                         fontSize: 26,
                         fontWeight: FontWeight.w600,
                         color: Colors.indigoAccent,
@@ -138,7 +138,7 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
                       children: [
                         TextSpan(
                           text: '/${quizResultState.items.length}',
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.rubik(
                             fontSize: 24.5,
                             color: Colors.black87,
                             fontWeight: FontWeight.w700,
@@ -197,7 +197,7 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
                           ),
                           Text(
                             "Previous",
-                            style: GoogleFonts.inter(
+                            style: GoogleFonts.rubik(
                               color: Colors.indigoAccent,
                               fontWeight: FontWeight.w600,
                               fontSize: 15.0,
@@ -231,7 +231,7 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
                         children: [
                           Text(
                             "Next",
-                            style: GoogleFonts.inter(
+                            style: GoogleFonts.rubik(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
                               fontSize: 15.0,

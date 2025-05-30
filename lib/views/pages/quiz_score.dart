@@ -68,7 +68,7 @@ class _QuizScoreState extends State<QuizScore> {
                   Spacer(),
                   Text(
                     "Your Score",
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.rubik(
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
@@ -81,7 +81,7 @@ class _QuizScoreState extends State<QuizScore> {
                   SizedBox(height: 15.0),
                   Text(
                     "Congratulations!",
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.rubik(
                       fontSize: 25.5,
                       letterSpacing: -0.5,
                       fontWeight: FontWeight.bold,
@@ -91,7 +91,7 @@ class _QuizScoreState extends State<QuizScore> {
                   SizedBox(height: 15.0),
                   Text(
                     "Great Job, $name! You have done well.",
-                    style: GoogleFonts.inter(
+                    style: GoogleFonts.rubik(
                       fontSize: 14.5,
                       letterSpacing: -0.5,
                       fontWeight: FontWeight.bold,
@@ -115,7 +115,7 @@ class _QuizScoreState extends State<QuizScore> {
                       },
                       child: Text(
                         "Back To Menu",
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.rubik(
                           fontSize: 21.0,
                           fontWeight: FontWeight.w600,
                         ),
