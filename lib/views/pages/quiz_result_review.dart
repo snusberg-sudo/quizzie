@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quizzie/data/providers/quiz_result_review_state.dart';
+import 'package:quizzie/views/widgets/my_action_icon_button.dart';
 import 'package:quizzie/views/widgets/review_choice_tile.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -22,6 +23,7 @@ class QuizResultReview extends ConsumerStatefulWidget {
 
 class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
   final pageController = PageController(keepPage: true);
+  List<String> alphabeticalIndex = ["A", "B", "C", "D"];
   num currentPage = 0;
 
   late List<dynamic> results;
@@ -46,10 +48,9 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
                 width: double.infinity,
                 padding: EdgeInsets.all(20.0),
                 decoration: BoxDecoration(
-                  color: Colors.indigoAccent.shade700.withValues(alpha: 0.2),
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(10.0),
-                  border: BoxBorder.all(color: Colors.indigoAccent, width: 1.5),
+                  color: Colors.amberAccent.shade400,
+                  borderRadius: BorderRadius.circular(25.0),
+                  border: BoxBorder.all(color: Colors.black87, width: 1.25),
                 ),
                 child:
                     quizResultState.isLoading
@@ -57,10 +58,10 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
                         : Text(
                           quiz['question_text'],
                           style: GoogleFonts.rubik(
-                            fontSize: 18,
+                            fontSize: 24,
                             letterSpacing: -0.6,
                             color: Colors.black87,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
               ),
@@ -75,6 +76,7 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
                           quiz['choices'][index]['id'],
                       seeExplanation: () {},
                       choice: quiz['choices'][index],
+                      alphaIndex: alphabeticalIndex.elementAt(index),
                     );
                   },
                   itemCount: quiz['choices'].length ?? 4,
@@ -87,26 +89,39 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.indigoAccent,
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.maybePop(context);
-          },
-          icon: FaIcon(
-            FontAwesomeIcons.chevronLeft,
-            size: 18.5,
-            color: Colors.black87,
+        leadingWidth: 80.0,
+        leading: Center(
+          child: Container(
+            margin: const EdgeInsets.only(left: 20.0),
+            width: 50.0,
+            height: 50.0,
+            child: IconButton.outlined(
+              onPressed: () {
+                Navigator.of(context).maybePop();
+              },
+              icon: FaIcon(
+                FontAwesomeIcons.chevronLeft,
+                color: Colors.white,
+                size: 18.0,
+              ),
+              style: IconButton.styleFrom(
+                side: BorderSide(color: Colors.white, width: 0.85),
+              ),
+            ),
           ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.indigoAccent,
         title: Text(
           widget.quizTitle,
           style: GoogleFonts.rubik(
-            color: Colors.black87,
-            fontWeight: FontWeight.w600,
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
+            fontSize: 18.0,
           ),
         ),
+        centerTitle: true,
       ),
       body: Center(
         child: Padding(
@@ -120,7 +135,7 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
                   Text(
                     "Question",
                     style: GoogleFonts.rubik(
-                      color: Colors.black87,
+                      color: Colors.white,
                       fontWeight: FontWeight.w700,
                       fontSize: 26.0,
                       letterSpacing: -0.5,
@@ -132,14 +147,14 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
                       style: GoogleFonts.rubik(
                         fontSize: 26,
                         fontWeight: FontWeight.w600,
-                        color: Colors.indigoAccent,
+                        color: Colors.white,
                       ),
                       children: [
                         TextSpan(
                           text: '/${quizResultState.items.length}',
                           style: GoogleFonts.rubik(
                             fontSize: 24.5,
-                            color: Colors.black87,
+                            color: Colors.white,
                             fontWeight: FontWeight.w700,
                             letterSpacing: -1,
                           ),
@@ -152,6 +167,7 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
               SizedBox(height: 20.0),
               Expanded(
                 child: PageView.builder(
+                  physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     final quiz = quizResultState.items[index];
                     return buildQuizResult(quiz, index);
@@ -179,11 +195,11 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
                       style: OutlinedButton.styleFrom(
                         minimumSize: Size(double.infinity, 45.0),
                         side: BorderSide(
-                          color: Colors.indigoAccent,
-                          width: 1.5,
+                          color: Colors.white,
+                          width: 0.85,
                         ),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14.0),
+                          borderRadius: BorderRadius.circular(20.0),
                         ),
                       ),
                       child: Row(
@@ -191,14 +207,14 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
                         children: [
                           FaIcon(
                             FontAwesomeIcons.chevronLeft,
-                            color: Colors.indigoAccent,
+                            color: Colors.white,
                             size: 14.0,
                           ),
                           Text(
                             "Previous",
                             style: GoogleFonts.rubik(
-                              color: Colors.indigoAccent,
-                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
                               fontSize: 15.0,
                               letterSpacing: -0.2,
                             ),
@@ -216,13 +232,14 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
                         );
                       },
                       style: OutlinedButton.styleFrom(
+                        backgroundColor: Colors.white,
                         minimumSize: Size(double.infinity, 45.0),
                         side: BorderSide(
                           color: Colors.indigoAccent,
                           width: 1.5,
                         ),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14.0),
+                          borderRadius: BorderRadius.circular(20.0),
                         ),
                       ),
                       child: Row(
@@ -231,20 +248,20 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
                           Text(
                             "Next",
                             style: GoogleFonts.rubik(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
+                              color: Colors.black87,
+                              fontWeight: FontWeight.w500,
                               fontSize: 15.0,
                               letterSpacing: -0.2,
                             ),
                           ),
-                          FaIcon(FontAwesomeIcons.chevronRight, size: 14.0),
+                          FaIcon(FontAwesomeIcons.chevronRight, size: 14.0, color: Colors.black87,),
                         ],
                       ),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 15.0,)
+              SizedBox(height: 15.0),
             ],
           ),
         ),
