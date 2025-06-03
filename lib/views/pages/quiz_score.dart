@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quizzie/api/api_service.dart';
 import 'package:quizzie/api/user_data_storage_service.dart';
+import 'package:quizzie/data/utils/decider_for_score.dart';
 import 'package:quizzie/views/widgets/quiz_progress_circle.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -22,7 +23,7 @@ class QuizScore extends StatefulWidget {
 
 class _QuizScoreState extends State<QuizScore> {
   Future<int>? _score;
-  String? name;
+  String? name, title, message;
   
   Future<void> getUserName() async {
     final storedName = await UserDataStorageService().get("name");
@@ -48,6 +49,7 @@ class _QuizScoreState extends State<QuizScore> {
   void initState() {
     super.initState();
     _score = _postAnswers();
+
     getUserName();
   }
 
@@ -59,6 +61,7 @@ class _QuizScoreState extends State<QuizScore> {
         future: _score,
         builder: (context, snapshot) {
           final isLoading = !snapshot.hasData;
+          final result = !isLoading ? DeciderForScore(score: snapshot.data ?? 0, totalQuiz: widget.quizCount) : null;
           return Skeletonizer(
             enabled: isLoading,
             child: Center(
@@ -67,7 +70,7 @@ class _QuizScoreState extends State<QuizScore> {
                 children: [
                   Spacer(),
                   Text(
-                    "Your Score",
+                    "あなたのスコア",
                     style: GoogleFonts.rubik(
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
@@ -80,7 +83,8 @@ class _QuizScoreState extends State<QuizScore> {
                   ),
                   SizedBox(height: 15.0),
                   Text(
-                    "Congratulations!",
+                    !isLoading ? result!.title : "",
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.rubik(
                       fontSize: 25.5,
                       letterSpacing: -0.5,
@@ -90,7 +94,8 @@ class _QuizScoreState extends State<QuizScore> {
                   ),
                   SizedBox(height: 15.0),
                   Text(
-                    "Great Job, $name! You have done well.",
+                    !isLoading ? result!.message : "",
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.rubik(
                       fontSize: 14.5,
                       letterSpacing: -0.5,
@@ -106,18 +111,21 @@ class _QuizScoreState extends State<QuizScore> {
                     height: 55.0,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
+                        backgroundColor: Colors.amberAccent.shade400,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
+                          borderRadius: BorderRadius.circular(25.0),
+                          side: BorderSide(color: Colors.black87, width: 1.25)
                         ),
                       ),
                       onPressed: () {
                         Navigator.pop(context);
                       },
                       child: Text(
-                        "Back To Menu",
+                        "メニューに戻る",
                         style: GoogleFonts.rubik(
-                          fontSize: 21.0,
+                          fontSize: 18.5,
                           fontWeight: FontWeight.w600,
+                          color: Colors.black87
                         ),
                       ),
                     ),

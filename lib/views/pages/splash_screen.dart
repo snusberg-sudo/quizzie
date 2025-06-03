@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:quizzie/api/user_data_storage_service.dart';
-import 'package:quizzie/views/pages/access_choice.dart';
 import 'package:quizzie/views/pages/ip_config_page.dart';
 import 'package:quizzie/views/pages/layout.dart';
 import 'package:quizzie/views/pages/welcome_page.dart';

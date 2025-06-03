@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quizzie/views/pages/access_choice.dart';
 import 'package:quizzie/views/pages/ip_config_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -16,12 +15,12 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends State<WelcomePage> {
   final pageController = PageController(keepPage: true);
   num currentPage = 0;
-  
+
   Future<void> getStarted() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('hasSeenWelcome', true);
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final dummyTexts = [
@@ -96,7 +95,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   dotHeight: 8,
                   dotWidth: 8,
                   dotColor: Color(0xFFCFD8DC),
-                  activeDotColor: Colors.blueAccent,
+                  activeDotColor: Colors.indigoAccent,
                   type: WormType.thinUnderground,
                 ),
               ),
@@ -104,7 +103,8 @@ class _WelcomePageState extends State<WelcomePage> {
               FilledButton(
                 style: FilledButton.styleFrom(
                   minimumSize: Size(280.0, 50.0),
-                  backgroundColor: const Color.fromRGBO(83, 109, 254, 1),
+                  backgroundColor: Colors.amberAccent.shade400,
+                  side: BorderSide(color: Colors.black87, width: 1.5),
                 ),
                 onPressed: () async {
                   if (currentPage < 2) {
@@ -114,7 +114,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     );
                   } else {
                     await getStarted();
-                    if(!context.mounted) return;
+                    if (!context.mounted) return;
                     Navigator.pushReplacement(
                       context,
                       PageRouteBuilder(
@@ -146,7 +146,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 },
                 child: Text(
                   currentPage < 2 ? "次ヘ" : "さあ、始めよう！",
-                  style: TextStyle(fontSize: 16),
+                  style: GoogleFonts.rubik(fontSize: 16, color: Colors.black87),
                 ),
               ),
             ],

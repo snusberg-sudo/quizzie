@@ -30,12 +30,7 @@ class _ChoiceTileState extends State<ChoiceTile> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30.0),
         side:
-            widget.isChoice
-                ? BorderSide(color: Colors.black87, width: 2)
-                : BorderSide(
-                  color: Colors.grey.shade100.withValues(alpha: 0.6),
-                  width: 2,
-                ),
+            BorderSide(color: Colors.black87, width: widget.isChoice ? 2 : 1.5),
       ),
       child: ListTile(
         leading: Text(
@@ -55,10 +50,10 @@ class _ChoiceTileState extends State<ChoiceTile> {
               ? widget.choice!["choice_text"]
               : "Dummy Text Dummy Text",
           style: GoogleFonts.rubik(
-            fontWeight: widget.isChoice ? FontWeight.bold : FontWeight.w500,
+            fontWeight: widget.isChoice ? FontWeight.bold : FontWeight.w400,
             color: Colors.black87,
-            fontSize: 17.5,
-            letterSpacing: -0.1,
+            fontSize: widget.isChoice ? 18.5 : 17.5,
+            letterSpacing: widget.isChoice ? -0.7 : -0.1,
           ),
         ),
         onTap: widget.handleTap,

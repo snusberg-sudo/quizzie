@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'dart:math' as math;
 
 class QuizResultMini extends StatelessWidget {
   const QuizResultMini({
@@ -15,9 +14,6 @@ class QuizResultMini extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displayValue =
-        mode == "latest" ? qaCount.toString() : '$score/$qaCount';
-    final circularValue = mode == "latest" ? 0.0 : score / qaCount;
     
     return SizedBox(
       width: 30,

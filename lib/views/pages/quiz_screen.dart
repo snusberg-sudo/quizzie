@@ -2,16 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quizzie/api/api_service.dart';
-import 'package:quizzie/data/models/question.dart';
 import 'package:quizzie/data/models/quiz.dart';
 import 'package:quizzie/data/providers/quiz_answers_state.dart';
 import 'package:quizzie/data/providers/quiz_questions_state.dart';
 import 'package:quizzie/views/pages/quiz_score.dart';
-import 'package:quizzie/views/widgets/choice_tile.dart';
 import 'package:quizzie/views/widgets/custom_progress_bar.dart';
 import 'package:quizzie/views/widgets/my_action_icon_button.dart';
 import 'package:quizzie/views/widgets/my_appbar.dart';
+import 'package:quizzie/views/widgets/quiz_screen_page_view.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class QuizScreen extends ConsumerStatefulWidget {
@@ -27,10 +25,9 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   final pageController = PageController(keepPage: true);
   int _currentQuestionIndex = 0;
   List alphabeticalIndex = ["A", "B", "C", "D"];
-  List<Map> selectedChoices = [];
   PaintingEffect skeletonEffect = PulseEffect(
-    from: Colors.grey.shade300,
-    to: Colors.grey.shade100,
+    from: Colors.white.withValues(alpha: 0.1),
+    to: Colors.white.withValues(alpha: 0.3),
   );
 
   @override
@@ -38,21 +35,41 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     super.initState();
   }
 
-  void _nextQuestion(int quizLength) {
+  void _nextQuestion(
+    int quizLength,
+    List<Map<String, dynamic>> selectedChoices,
+  ) {
     if (_currentQuestionIndex < quizLength - 1) {
       setState(() {
-        _currentQuestionIndex++;
+        pageController.nextPage(
+          duration: Duration(milliseconds: 900),
+          curve: Curves.easeInOut,
+        );
       });
     } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder:
-              (context) => QuizScore(
+      Navigator.of(context).pushReplacement(
+        PageRouteBuilder(
+          pageBuilder:
+              (context, animation, secondaryAnimation) => QuizScore(
                 quizId: widget.quiz.id,
                 selectedChoices: selectedChoices,
                 quizCount: widget.quiz.questionsCount,
               ),
+          transitionDuration: Duration(milliseconds: 650),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(0.0, -1.0);
+            const end = Offset.zero;
+            const curve = Curves.easeInOut;
+
+            final tween = Tween(
+              begin: begin,
+              end: end,
+            ).chain(CurveTween(curve: curve));
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            );
+          },
         ),
       );
     }
@@ -63,12 +80,6 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
       return hasChoice ? "Next" : "Skip";
     }
     return "Finish";
-  }
-
-  void _handleChoiceTap(dynamic choiceId) {
-    setState(() {
-      selectedChoices[_currentQuestionIndex]['choice_id'] = choiceId;
-    });
   }
 
   bool isSelected(
@@ -82,7 +93,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     );
   }
 
-  bool hasChoice(int questionId, List<Map<String, dynamic>> selectedAnswers) {
+  bool hasChoice(int questionId, List<Map<dynamic, dynamic>> selectedAnswers) {
     return selectedAnswers.any((entry) => entry['question_id'] == questionId);
   }
 
@@ -98,20 +109,29 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     return Scaffold(
       backgroundColor: Colors.indigoAccent,
       body: CustomScrollView(
-        shrinkWrap: false,
+        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         slivers: [
           MyAppbar(
             centerTitle: true,
             backgroundColor: Colors.amberAccent.shade400,
             expandedHeight: 130.0,
             collapsedHeight: 60.0,
-            title: Text(
-              widget.quiz.title,
-              style: GoogleFonts.rubik(
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
-                fontSize: 18,
-                letterSpacing: -0.6,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(35.0),
+              ),
+              side: BorderSide(color: Colors.black87, width: 1.5),
+            ),
+            title: Hero(
+              tag: "quiz_title",
+              child: Text(
+                widget.quiz.title,
+                style: GoogleFonts.rubik(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                  fontSize: 18,
+                  letterSpacing: -0.6,
+                ),
               ),
             ),
             leading: null,
@@ -126,6 +146,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
+                minS: Size(40, 40),
                 borderRadiusGeometry: BorderRadiusGeometry.circular(50.0),
                 borderSide: BorderSide(color: Colors.black54, width: 2),
               ),
@@ -194,143 +215,151 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
               ),
             ),
           ),
-          SliverFillRemaining(
-            child: Padding(
-              padding: EdgeInsetsGeometry.symmetric(horizontal: 20.0),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: PageView.builder(
-                      itemCount: quizLength,
-                      controller: pageController,
-                      itemBuilder: (context, pageIndex) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 15.0),
-                            Text(
-                              !isLoading
-                                  ? quizQuestions[pageIndex]['question_text']
-                                  : '',
-                              style: GoogleFonts.rubik(
-                                fontSize: 26,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                                letterSpacing: -0.5,
-                              ),
-                            ),
-                            SizedBox(height: 15.0),
-                            Text(
-                              "Choose your answer",
-                              style: GoogleFonts.rubik(
-                                fontSize: 14.5,
-                                color: Colors.grey.shade100.withValues(
-                                  alpha: 0.8,
+          SliverToBoxAdapter(
+            child: Skeletonizer(
+              effect: skeletonEffect,
+              enabled: isLoading,
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.65,
+                child:
+                    isLoading
+                        ? Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 15.0),
+                              Bone.text(fontSize: 20),
+                              SizedBox(height: 20.0),
+                              Bone.text(fontSize: 12),
+                              Expanded(
+                                child: ListView.builder(
+                                  itemBuilder: (context, index) {
+                                    return Card(
+                                      margin: EdgeInsets.only(bottom: 17.5),
+                                      color: Colors.grey.shade300.withValues(
+                                        alpha: 0.35,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          30.0,
+                                        ),
+                                      ),
+                                      child: ListTile(
+                                        leading: Bone.circle(size: 26.0),
+                                        title: Bone.multiText(
+                                          lines: 2,
+                                          fontSize: 16.0,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  itemCount: 4,
                                 ),
-                                fontWeight: FontWeight.w500,
-                                letterSpacing: -0.2,
                               ),
-                            ),
+                            ],
+                          ),
+                        )
+                        : Column(
+                          children: [
                             Expanded(
-                              child: ListView.builder(
-                                primary: true,
-                                padding: EdgeInsets.symmetric(vertical: 15.0),
-                                itemCount:
-                                    !isLoading
-                                        ? quizQuestions[pageIndex]['choices']
-                                            .length
-                                        : 4,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  final choice =
-                                      !isLoading
-                                          ? quizQuestions[pageIndex]["choices"][index]
-                                          : null;
-                                  final isChoice =
-                                      !isLoading
-                                          ? isSelected(
-                                            quizQuestions[pageIndex]['id'],
-                                            choice['id'],
-                                            quizAnswers,
-                                          )
-                                          : false;
-                                  return ChoiceTile(
-                                    alphaChoice: alphabeticalIndex.elementAt(
-                                      index,
-                                    ),
-                                    hasData: !isLoading,
-                                    isChoice: isChoice,
-                                    choice: choice,
-                                    handleTap:
-                                        () => _handleChoiceTap(choice['id']),
+                              child: QuizScreenPageView(
+                                quizLength: quizLength,
+                                pageController: pageController,
+                                currentQuestionIndex: _currentQuestionIndex,
+                                quizQuestions: quizQuestions,
+                                quizAnswers: quizAnswers,
+                                isLoading: isLoading,
+                                onSelectAnswer: (questionId, choiceId) {
+                                  quizAnswersState.selectAnswer(
+                                    questionId,
+                                    choiceId,
                                   );
                                 },
+                                onPageChanged: (index) {
+                                  setState(() {
+                                    _currentQuestionIndex = index;
+                                  });
+                                },
+                                alphabeticalIndex: alphabeticalIndex,
+                                hasChoice: hasChoice,
+                                isSelected: isSelected,
                               ),
                             ),
                           ],
-                        );
-                      },
+                        ),
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.all(35.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 55.0,
+                child: FilledButton(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: Colors.amberAccent.shade400,
+                    maximumSize: Size(double.infinity, 55.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                      side: BorderSide(color: Colors.black87, width: 2),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(35.0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 55.0,
-                      child: FilledButton(
-                        style: FilledButton.styleFrom(
-                          backgroundColor: Colors.amberAccent.shade400,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                            side: BorderSide(color: Colors.black87, width: 2),
-                          ),
-                        ),
-                        onPressed:
-                            !isLoading
-                                ? () {
-                                  _nextQuestion(quizLength);
-                                }
-                                : null,
-                        child:
-                            !isLoading
-                                ? Padding(
-                                  padding: EdgeInsetsGeometry.only(
-                                    right: 10.0,
-                                    left: 15.0,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "", //_buttonTextDecider(hasChoice()),
-                                        style: GoogleFonts.rubik(
-                                          fontSize: 21.0,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.black87,
+                  onPressed:
+                      !isLoading
+                          ? () {
+                            _nextQuestion(quizLength, quizAnswers);
+                          }
+                          : () {},
+                  child:
+                      !isLoading
+                          ? Padding(
+                            padding: EdgeInsetsGeometry.only(
+                              right: 10.0,
+                              left: 15.0,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  _buttonTextDecider(
+                                    isLoading
+                                        ? false
+                                        : hasChoice(
+                                          quizQuestions.isNotEmpty
+                                              ? quizQuestions[_currentQuestionIndex]['id']
+                                              : 0,
+                                          quizAnswers,
                                         ),
-                                      ),
-                                      FaIcon(
-                                        FontAwesomeIcons.chevronRight,
-                                        color: Colors.black87,
-                                      ),
-                                    ],
+                                    quizLength,
                                   ),
-                                )
-                                : SizedBox(
-                                  width: 25,
-                                  height: 25,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 3,
-                                    strokeCap: StrokeCap.round,
-                                    color: Colors.grey.shade100,
-                                    backgroundColor: Colors.grey.shade300,
+                                  style: GoogleFonts.rubik(
+                                    fontSize: 21.0,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black87,
                                   ),
                                 ),
-                      ),
-                    ),
-                  ),
-                ],
+                                FaIcon(
+                                  FontAwesomeIcons.chevronRight,
+                                  color: Colors.black87,
+                                ),
+                              ],
+                            ),
+                          )
+                          : SizedBox(
+                            width: 25,
+                            height: 25,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 3,
+                              strokeCap: StrokeCap.round,
+                              color: Colors.white,
+                              backgroundColor: Colors.white.withValues(
+                                alpha: 0.3,
+                              ),
+                            ),
+                          ),
+                ),
               ),
             ),
           ),

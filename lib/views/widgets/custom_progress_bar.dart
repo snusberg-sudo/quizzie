@@ -16,7 +16,7 @@ class CustomProgressBar extends StatelessWidget {
     this.progressColor = Colors.indigoAccent,
     this.progressBorderColor = Colors.black87,
     this.height = 10.0,
-    this.duration = const Duration(milliseconds: 500),
+    this.duration = const Duration(milliseconds: 425),
     this.curve = Curves.easeInOut,
   });
 

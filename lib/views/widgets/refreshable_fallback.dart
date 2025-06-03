@@ -20,6 +20,6 @@ class RefreshableFallback extends StatelessWidget {
             ),
           ],
         ),
-      );;
+      );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:quizzie/views/pages/access_choice.dart';
 import 'package:quizzie/views/styles/common_input_decoration.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,13 +44,12 @@ class _IpConfigPageState extends State<IpConfigPage>
               SizedBox(height: 20),
               FilledButton(
                 onPressed: () async {
-                  if (context.mounted) {
-                    await saveIP(_ipController.text);
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => AccessChoice()),
-                    );
-                  }
+                  if (!context.mounted) return;
+                  await saveIP(_ipController.text);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => AccessChoice()),
+                  );
                 },
                 child: Text('Save IP'),
               ),

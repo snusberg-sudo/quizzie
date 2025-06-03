@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quizzie/api/api_service.dart';
 import 'package:quizzie/data/providers/quiz_result_review_state.dart';
 import 'package:quizzie/views/widgets/review_choice_tile.dart';
 import 'package:skeletonizer/skeletonizer.dart';

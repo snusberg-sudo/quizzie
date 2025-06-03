@@ -1,13 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quizzie/api/api_service.dart';
 import 'package:quizzie/api/user_data_storage_service.dart';
 import 'package:quizzie/views/pages/access_choice.dart';
 import 'package:quizzie/views/pages/layout.dart';
 import 'package:quizzie/views/styles/common_input_decoration.dart';
-import 'package:quizzie/views/styles/common_text_styles.dart';
 import 'package:quizzie/views/widgets/outlined_logo_button.dart';
 import 'package:quizzie/views/widgets/password_field.dart';
 
@@ -54,9 +53,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.indigoAccent,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.indigoAccent,
         leadingWidth: 65.0,
         toolbarHeight: 45.0,
         leading: Padding(
@@ -68,11 +67,15 @@ class _LoginPageState extends State<LoginPage> {
                 MaterialPageRoute(builder: (context) => AccessChoice()),
               );
             },
-            icon: Icon(Icons.chevron_left_sharp, size: 28.5),
+            icon: FaIcon(
+              FontAwesomeIcons.chevronLeft,
+              size: 19.5,
+              color: Colors.white,
+            ),
             style: IconButton.styleFrom(
-              side: BorderSide(color: Colors.grey.shade300, width: 0.75),
+              side: BorderSide(color: Colors.white, width: 1),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(13.0),
+                borderRadius: BorderRadius.circular(40.0),
               ),
             ),
           ),
@@ -95,10 +98,11 @@ class _LoginPageState extends State<LoginPage> {
                         SizedBox(height: 20.0),
                         Text(
                           "おかえりなさい！またお会いできて嬉しいです！",
-                          style: GoogleFonts.openSans(
+                          style: GoogleFonts.rubik(
                             fontSize: 30.0,
                             fontWeight: FontWeight.bold,
                             letterSpacing: -1,
+                            color: Colors.white,
                           ),
                         ),
                         SizedBox(height: 35.0),
@@ -119,7 +123,10 @@ class _LoginPageState extends State<LoginPage> {
                               style: TextButton.styleFrom(),
                               child: Text(
                                 "パスワードをお忘れですか？",
-                                style: commonTextStyle1,
+                                style: GoogleFonts.rubik(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
                           ],
@@ -131,14 +138,23 @@ class _LoginPageState extends State<LoginPage> {
                           },
                           clipBehavior: Clip.antiAlias,
                           style: FilledButton.styleFrom(
-                            side: BorderSide.none,
-                            backgroundColor: Colors.indigoAccent,
+                            side: BorderSide(
+                              color: Colors.black87,
+                              width: 1.25,
+                            ),
+                            backgroundColor: Colors.amberAccent.shade400,
                             minimumSize: Size(double.infinity, 55.0),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
+                              borderRadius: BorderRadius.circular(20.0),
                             ),
                           ),
-                          child: Text("ログイン", style: TextStyle(fontSize: 16.0)),
+                          child: Text(
+                            "ログイン",
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.black87,
+                            ),
+                          ),
                         ),
                         SizedBox(height: 40.0),
                         Row(
@@ -153,7 +169,13 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 2.5),
-                              child: Text("他の方法でログイン", style: commonTextStyle1),
+                              child: Text(
+                                "他の方法でログイン",
+                                style: GoogleFonts.rubik(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                             ),
                             Expanded(
                               child: Divider(
@@ -200,12 +222,17 @@ class _LoginPageState extends State<LoginPage> {
                     child: RichText(
                       text: TextSpan(
                         text: "初めてですか？ ",
-                        style: commonTextStyle1,
+                        style: GoogleFonts.rubik(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
                         recognizer: TapGestureRecognizer()..onTap = () {},
                         children: [
                           TextSpan(
                             text: "新規登録はこちら",
-                            style: TextStyle(color: Colors.indigoAccent),
+                            style: TextStyle(
+                              color: Colors.amberAccent.shade400,
+                            ),
                           ),
                         ],
                       ),

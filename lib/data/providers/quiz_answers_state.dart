@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quizzie/api/api_service.dart';
 
 class QuizAnswersNotifier extends StateNotifier<List<Map<String, dynamic>>> {
   QuizAnswersNotifier() : super([]);
