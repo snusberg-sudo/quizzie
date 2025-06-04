@@ -43,7 +43,25 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                decoration: BoxDecoration(
+                  color: Colors.amberAccent.shade400,
+                  border: BoxBorder.all(color: Colors.black87),
+                  borderRadius: BorderRadius.circular(20.0)
+                ),
+                child: Text(
+                  "Correct",
+                  style: GoogleFonts.rubik(
+                    color: Colors.black87,
+                    fontSize: 15.5,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20.0),
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.all(20.0),
@@ -68,6 +86,7 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
               SizedBox(height: 30.0),
               Expanded(
                 child: ListView.builder(
+                  primary: false,
                   itemBuilder: (context, index) {
                     return ReviewChoiceTile(
                       isSkipped: quiz['user_choice_id'] == null,
@@ -164,7 +183,7 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
                   ),
                 ],
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 10.0),
               Expanded(
                 child: PageView.builder(
                   physics: NeverScrollableScrollPhysics(),
@@ -194,10 +213,7 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
                       },
                       style: OutlinedButton.styleFrom(
                         minimumSize: Size(double.infinity, 45.0),
-                        side: BorderSide(
-                          color: Colors.white,
-                          width: 0.85,
-                        ),
+                        side: BorderSide(color: Colors.white, width: 0.85),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20.0),
                         ),
@@ -254,7 +270,11 @@ class _QuizResultReviewState extends ConsumerState<QuizResultReview> {
                               letterSpacing: -0.2,
                             ),
                           ),
-                          FaIcon(FontAwesomeIcons.chevronRight, size: 14.0, color: Colors.black87,),
+                          FaIcon(
+                            FontAwesomeIcons.chevronRight,
+                            size: 14.0,
+                            color: Colors.black87,
+                          ),
                         ],
                       ),
                     ),

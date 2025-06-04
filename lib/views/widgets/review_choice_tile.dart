@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:icon_decoration/icon_decoration.dart';
 
 class ReviewChoiceTile extends StatelessWidget {
   const ReviewChoiceTile({
@@ -17,7 +20,7 @@ class ReviewChoiceTile extends StatelessWidget {
   final Map<String, dynamic>? choice;
 
   Color? determineCardColor() {
-    if (isChoice) {
+    if (isChoice && !isSkipped) {
       return Colors.amberAccent.shade400;
     }
     return Colors.white;
@@ -28,6 +31,18 @@ class ReviewChoiceTile extends StatelessWidget {
       return Colors.black87;
     }
     return Colors.transparent;
+  }
+
+  Widget? determineTrailing() {
+    if (isChoice) {
+      return DecoratedIcon(
+        icon: Icon(Icons.check_outlined, color: Colors.white, size: 35,),
+        decoration: IconDecoration(
+          border: IconBorder(color: Colors.black87, width: 4.5),
+        ),
+      );
+    }
+    return null;
   }
 
   @override
@@ -61,6 +76,7 @@ class ReviewChoiceTile extends StatelessWidget {
             letterSpacing: -0.1,
           ),
         ),
+        trailing: determineTrailing(),
       ),
     );
   }
