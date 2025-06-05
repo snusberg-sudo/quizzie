@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:quizzie/api/user_data_storage_service.dart';
-import 'package:quizzie/views/pages/access_choice.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quizzie/data/providers/user_data_state.dart';
 import 'package:quizzie/views/pages/ip_config_page.dart';
 import 'package:quizzie/views/pages/layout.dart';
 import 'package:quizzie/views/pages/welcome_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
@@ -22,8 +22,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _cusInit() async {
     final prefs = await SharedPreferences.getInstance();
-    final token = await UserDataStorageService().get('token');
     final hasSeenWelcome = prefs.getBool('hasSeenWelcome') ?? false;
+    final token = ref.read(userDataProvider).user?.token;
     if (!mounted) return;
     if (!hasSeenWelcome) {
       if (!mounted) return;
@@ -46,6 +46,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: CircularProgressIndicator()), backgroundColor: Colors.white,);
+    return Scaffold(
+      body: Center(child: CircularProgressIndicator()),
+      backgroundColor: Colors.white,
+    );
   }
 }

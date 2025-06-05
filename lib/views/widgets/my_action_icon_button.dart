@@ -7,6 +7,7 @@ class MyActionIconButton extends StatelessWidget {
     required this.onPressed,
     this.borderSide = BorderSide.none,
     this.borderRadiusGeometry = BorderRadius.zero,
+    this.minS = Size.zero,
     this.backgroundColor
   });
 
@@ -15,6 +16,7 @@ class MyActionIconButton extends StatelessWidget {
   final BorderSide borderSide;
   final BorderRadiusGeometry borderRadiusGeometry;
   final Color? backgroundColor;
+  final Size minS;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,7 @@ class MyActionIconButton extends StatelessWidget {
       icon: icon,
       color: Colors.white,
       style: ElevatedButton.styleFrom(
+        minimumSize: minS,
         backgroundColor: backgroundColor,
         shape: RoundedRectangleBorder(
           borderRadius: borderRadiusGeometry,

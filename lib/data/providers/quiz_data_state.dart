@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quizzie/api/api_service.dart';
+import 'package:quizzie/data/models/quiz.dart';
 
 class QuizDataState {
   final List items;
@@ -18,7 +19,9 @@ class QuizDataState {
 }
 
 class QuizDataNotifier extends StateNotifier<QuizDataState> {
-  QuizDataNotifier() : super(QuizDataState()) {
+  final Ref ref;
+
+  QuizDataNotifier(this.ref) : super(QuizDataState()) {
     loadData();
   }
 
@@ -26,7 +29,7 @@ class QuizDataNotifier extends StateNotifier<QuizDataState> {
     if (state.isLoading) return;
     await Future.delayed(Duration.zero);
     state = state.copyWith(isLoading: true, error: null);
-    final apiService = ApiService();
+    final apiService = ref.read(apiServiceProvider);
 
     try {
       final response = await apiService.get('/user/quiz-assignments');
@@ -36,14 +39,20 @@ class QuizDataNotifier extends StateNotifier<QuizDataState> {
     }
   }
 
+  void clearData() {
+    state = state.copyWith(items: [], isLoading: false, error: null);
+  }
+
   Future<void> refreshData() async {
+    clearData();
     await loadData();
   }
 }
 
-final quizDataProvider = StateNotifierProvider((ref) {
-  return QuizDataNotifier();
-});
+final quizDataProvider =
+    StateNotifierProvider.autoDispose<QuizDataNotifier, QuizDataState>((ref) {
+      return QuizDataNotifier(ref);
+    });
 
 final latestQuizProvider = Provider((ref) {
   final quizDataState = ref.watch(quizDataProvider);

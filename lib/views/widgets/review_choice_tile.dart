@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:icon_decoration/icon_decoration.dart';
 
 class ReviewChoiceTile extends StatelessWidget {
   const ReviewChoiceTile({
@@ -8,43 +9,45 @@ class ReviewChoiceTile extends StatelessWidget {
     required this.seeExplanation,
     required this.choice,
     required this.isSkipped,
+    required this.alphaIndex,
   });
 
   final bool isChoice, isSkipped;
   final VoidCallback seeExplanation;
+  final String alphaIndex;
   final Map<String, dynamic>? choice;
 
   Color? determineCardColor() {
-    if (choice!['is_correct'] && !isSkipped) {
-      return Colors.green.shade200.withValues(alpha: 0.3);
-    } else if (isChoice && !choice!["is_correct"]) {
-      return Colors.red.shade200.withValues(alpha: 0.4);
-    } else if (!isChoice && isSkipped && choice!['is_correct']) {
-      return Colors.amber.shade200.withValues(alpha: 0.3);
-    }
-    return Colors.grey.shade100;
-  }
-
-  Color? determineColor() {
-    if (choice!['is_correct'] && !isSkipped) {
-      return Colors.greenAccent.shade700;
-    } else if (isChoice && !choice!["is_correct"]) {
-      return Colors.redAccent;
-    } else if (!isChoice && isSkipped && choice!['is_correct']) {
+    if (isChoice && !isSkipped) {
       return Colors.amberAccent.shade400;
     }
-    return Colors.black87;
+    return Colors.white;
   }
 
   Color determineBorderColor() {
-    if (choice!['is_correct'] && !isSkipped) {
-      return Colors.greenAccent.shade700;
-    } else if (isChoice && !choice!["is_correct"]) {
-      return Colors.redAccent;
-    } else if (!isChoice && isSkipped && choice!['is_correct']) {
-      return Colors.amberAccent;
+    if (isChoice) {
+      return Colors.black87;
     }
     return Colors.transparent;
+  }
+
+  Widget? determineTrailing() {
+    if (choice!['is_correct']) {
+      return DecoratedIcon(
+        icon: Icon(Icons.check_outlined, color: Colors.indigoAccent, size: 35,),
+        decoration: IconDecoration(
+          border: IconBorder(color: Colors.black87, width: 3.5),
+        ),
+      );
+    } else if (isChoice && !choice!["is_correct"]){
+      return DecoratedIcon(
+        icon: Icon(Icons.close_outlined, color: Colors.indigoAccent, size: 35,),
+        decoration: IconDecoration(
+          border: IconBorder(color: Colors.black87, width: 3.5),
+        ),
+      );
+    }
+    return null;
   }
 
   @override
@@ -53,22 +56,32 @@ class ReviewChoiceTile extends StatelessWidget {
       color: determineCardColor(),
       margin: EdgeInsets.only(bottom: 17.5),
       shadowColor: Colors.transparent,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0), side: BorderSide(
-        color: determineBorderColor(),
-        width: 1.5,
-      )),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30.0),
+        side: BorderSide(color: determineBorderColor(), width: 1.5),
+      ),
       child: ListTile(
+        leading: Text(
+          "$alphaIndex.",
+          style: GoogleFonts.rubik(
+            fontWeight: FontWeight.w600,
+            color: Colors.black87,
+            fontSize: 19.5,
+            letterSpacing: -0.6,
+          ),
+        ),
         minTileHeight: 20.0,
         contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         title: Text(
           choice!["choice_text"] ?? "Dummy Text Dummy Text",
           style: GoogleFonts.rubik(
-            fontWeight: FontWeight.bold,
-            color: determineColor(),
-            fontSize: 13.5,
+            fontWeight: FontWeight.w500,
+            color: Colors.black87,
+            fontSize: 16.5,
             letterSpacing: -0.1,
           ),
         ),
+        trailing: determineTrailing(),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quizzie/views/pages/login_page.dart';
 
@@ -50,16 +51,16 @@ class AccessChoice extends StatelessWidget {
                   },
                   clipBehavior: Clip.antiAlias,
                   style: FilledButton.styleFrom(
-                    side: BorderSide.none,
+                    side: BorderSide(color: Colors.black87, width: 1.25),
                     backgroundColor: Colors.indigoAccent,
                     minimumSize: Size(double.infinity, 50.0),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+                      borderRadius: BorderRadius.circular(20.0),
                     ),
                   ),
                   child: Text(
                     "ログイン",
-                    style: TextStyle(fontWeight: FontWeight.w700),
+                    style: GoogleFonts.rubik(fontWeight: FontWeight.w700),
                   ),
                 ),
                 SizedBox(height: 30.0),
@@ -67,16 +68,17 @@ class AccessChoice extends StatelessWidget {
                   onPressed: () {},
                   clipBehavior: Clip.antiAliasWithSaveLayer,
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: Colors.indigoAccent, width: 1.25),
+                    side: BorderSide(color: Colors.black87, width: 1.25),
+                    backgroundColor: Colors.amberAccent.shade400,
                     minimumSize: Size(double.infinity, 50.0),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+                      borderRadius: BorderRadius.circular(20.0),
                     ),
                   ),
                   child: Text(
                     "サインアップ",
                     style: TextStyle(
-                      color: Colors.indigoAccent,
+                      color: Colors.black87,
                       fontWeight: FontWeight.w700,
                     ),
                   ),

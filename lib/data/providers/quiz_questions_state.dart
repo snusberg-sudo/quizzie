@@ -23,15 +23,16 @@ class QuizQuestionsState {
 
 class QuizQuestionsNotifier extends StateNotifier<QuizQuestionsState> {
   final int quizId;
+  final Ref ref;
 
-  QuizQuestionsNotifier(this.quizId) : super(QuizQuestionsState()) {
+  QuizQuestionsNotifier(this.quizId, this.ref) : super(QuizQuestionsState()) {
     loadData();
   }
 
   Future<void> loadData() async {
     await Future.delayed(Duration.zero);
     state = state.copyWith(isLoading: true, error: null);
-    final apiService = ApiService();
+    final apiService = ref.read(apiServiceProvider);
 
     try {
       final response = await apiService.get(
@@ -53,5 +54,5 @@ class QuizQuestionsNotifier extends StateNotifier<QuizQuestionsState> {
 
 final quizQuestionsProvider = StateNotifierProvider.autoDispose
     .family<QuizQuestionsNotifier, QuizQuestionsState, int>((ref, quizId) {
-      return QuizQuestionsNotifier(quizId);
+      return QuizQuestionsNotifier(quizId, ref);
     });

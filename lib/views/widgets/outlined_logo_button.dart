@@ -10,8 +10,9 @@ class OutlinedLogoButton extends StatelessWidget {
     return OutlinedButton(
       onPressed: () {},
       style: OutlinedButton.styleFrom(
-        side: BorderSide(color: Colors.grey.shade300, width: 1.25),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        backgroundColor: Colors.white,
+        side: BorderSide(color: Colors.black87, width: 1.5),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         minimumSize: Size(100.0, 65.0),
       ),
       child: Image.asset(logoPath, width: logoWidth, height: logoHeight),

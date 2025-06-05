@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:quizzie/api/user_data_storage_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quizzie/data/providers/user_data_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
+  final String? token;
   final Dio _dio = Dio();
   bool _initialized = false;
 
@@ -11,12 +13,11 @@ class ApiService {
     return prefs.getString("ip");
   }
 
-  ApiService() {
+  ApiService({required this.token}) {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           await _ensureInitialized();
-          final token = await UserDataStorageService().get("token");
           if (token != null) {
             options.headers['Authorization'] = 'Bearer $token';
           }
@@ -48,3 +49,8 @@ class ApiService {
     return _dio.post(endpoint, data: data);
   }
 }
+
+final apiServiceProvider = Provider<ApiService>((ref) {
+  final token = ref.watch(userDataProvider).user?.token;
+  return ApiService(token: token);
+});

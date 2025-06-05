@@ -62,7 +62,9 @@ class QuizSliverList extends ConsumerWidget {
           child: ListView.builder(
             primary: false,
             shrinkWrap: false,
-            physics: AlwaysScrollableScrollPhysics(),
+            physics: BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics(),
+            ),
             padding: EdgeInsets.only(top: 20),
             itemCount: quizItems.isNotEmpty ? quizItems.length : 4,
             itemBuilder: (context, index) {
@@ -170,7 +172,7 @@ class QuizSliverList extends ConsumerWidget {
                               letterSpacing: -0.3,
                             ),
                           )
-                          : Bone.multiText(fontSize: 12.0, lines: 2,),
+                          : Bone.multiText(fontSize: 12.0, lines: 2),
                   trailing:
                       !quizDataState.isLoading
                           ? QuizResultMini(
@@ -180,7 +182,9 @@ class QuizSliverList extends ConsumerWidget {
                           )
                           : Bone.square(
                             size: 30,
-                            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5.0),
+                            ),
                           ),
                 ),
               );
