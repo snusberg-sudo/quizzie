@@ -1,13 +1,16 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quizzie/api/user_data_storage_service.dart';
+import 'package:quizzie/data/providers/user_data_state.dart';
+import 'package:quizzie/views/pages/avatar_selection.dart';
 import 'package:quizzie/views/pages/login_page.dart';
 import 'package:quizzie/views/widgets/list_view_navigation.dart';
 import 'package:quizzie/views/widgets/my_action_icon_button.dart';
 import 'package:quizzie/views/widgets/my_appbar.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({
     super.key,
     required this.name,
@@ -20,10 +23,10 @@ class ProfilePage extends StatefulWidget {
   final Animation<double> animation;
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  ConsumerState<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage>
+class _ProfilePageState extends ConsumerState<ProfilePage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
@@ -60,6 +63,7 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
+    final userDataState = ref.read(userDataProvider.notifier);
     return Scaffold(
       backgroundColor: Colors.amberAccent.shade400,
       body: NestedScrollView(
@@ -96,17 +100,28 @@ class _ProfilePageState extends State<ProfilePage>
                 children: [
                   Hero(
                     tag: "profile-image",
-                    child: Container(
-                      padding: EdgeInsets.all(1.0),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                      ),
-                      child: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        radius: 45.0,
-                        backgroundImage: AssetImage('assets/images/851.png'),
-                      ),
+                    child: OpenContainer(
+                      closedShape: CircleBorder(),
+                      transitionDuration: Duration(milliseconds: 650),
+                      transitionType: ContainerTransitionType.fadeThrough,
+                      closedBuilder: (context, action) {
+                        return GestureDetector(
+                          onTap: action,
+                          child: Container(
+                            padding: EdgeInsets.all(1.0),
+                            child: CircleAvatar(
+                              backgroundColor: Colors.white,
+                              radius: 45.0,
+                              backgroundImage: AssetImage(
+                                'assets/avatars/1262.png',
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      openBuilder: (context, action) {
+                        return AvatarSelection();
+                      },
                     ),
                   ),
                   SizedBox(height: 5.0),
@@ -158,7 +173,10 @@ class _ProfilePageState extends State<ProfilePage>
               child: Container(
                 color: Colors.white,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 15.0,
+                    vertical: 20.0,
+                  ),
                   child: FadeTransition(
                     opacity: _fadeAnimation,
                     child: Column(
@@ -194,13 +212,17 @@ class _ProfilePageState extends State<ProfilePage>
                             {
                               'icon': FontAwesomeIcons.rightFromBracket,
                               'text': "ログアウト",
-                              'action': () {
-                                UserDataStorageService().clearAuth();
+                              'action': () async {
+                                await userDataState.clearUserData();
+                                if (!context.mounted) return;
                                 Navigator.of(context).pushAndRemoveUntil(
                                   PageRouteBuilder(
                                     pageBuilder:
-                                        (context, animation, secondaryAnimation) =>
-                                            LoginPage(),
+                                        (
+                                          context,
+                                          animation,
+                                          secondaryAnimation,
+                                        ) => LoginPage(),
                                     transitionsBuilder: (
                                       context,
                                       animation,
@@ -212,7 +234,9 @@ class _ProfilePageState extends State<ProfilePage>
                                         child: child,
                                       );
                                     },
-                                    transitionDuration: Duration(milliseconds: 300),
+                                    transitionDuration: Duration(
+                                      milliseconds: 300,
+                                    ),
                                   ),
                                   (Route<dynamic> route) => false,
                                 );

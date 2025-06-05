@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icon_decoration/icon_decoration.dart';
 
@@ -34,11 +32,18 @@ class ReviewChoiceTile extends StatelessWidget {
   }
 
   Widget? determineTrailing() {
-    if (isChoice) {
+    if (choice!['is_correct']) {
       return DecoratedIcon(
-        icon: Icon(Icons.check_outlined, color: Colors.white, size: 35,),
+        icon: Icon(Icons.check_outlined, color: Colors.indigoAccent, size: 35,),
         decoration: IconDecoration(
-          border: IconBorder(color: Colors.black87, width: 4.5),
+          border: IconBorder(color: Colors.black87, width: 3.5),
+        ),
+      );
+    } else if (isChoice && !choice!["is_correct"]){
+      return DecoratedIcon(
+        icon: Icon(Icons.close_outlined, color: Colors.indigoAccent, size: 35,),
+        decoration: IconDecoration(
+          border: IconBorder(color: Colors.black87, width: 3.5),
         ),
       );
     }

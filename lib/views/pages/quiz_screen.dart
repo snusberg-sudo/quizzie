@@ -6,6 +6,7 @@ import 'package:quizzie/data/models/quiz.dart';
 import 'package:quizzie/data/providers/quiz_answers_state.dart';
 import 'package:quizzie/data/providers/quiz_questions_state.dart';
 import 'package:quizzie/views/pages/quiz_score.dart';
+import 'package:quizzie/views/styles/common_skeleton_paint.dart';
 import 'package:quizzie/views/widgets/custom_progress_bar.dart';
 import 'package:quizzie/views/widgets/my_action_icon_button.dart';
 import 'package:quizzie/views/widgets/my_appbar.dart';
@@ -25,10 +26,6 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
   final pageController = PageController(keepPage: true);
   int _currentQuestionIndex = 0;
   List alphabeticalIndex = ["A", "B", "C", "D"];
-  PaintingEffect skeletonEffect = PulseEffect(
-    from: Colors.white.withValues(alpha: 0.1),
-    to: Colors.white.withValues(alpha: 0.3),
-  );
 
   @override
   void initState() {
@@ -39,6 +36,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     int quizLength,
     List<Map<String, dynamic>> selectedChoices,
   ) {
+    print(selectedChoices);
     if (_currentQuestionIndex < quizLength - 1) {
       setState(() {
         pageController.nextPage(
@@ -232,13 +230,32 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                               Bone.text(fontSize: 20),
                               SizedBox(height: 20.0),
                               Bone.text(fontSize: 12),
+                              SizedBox(height: 10.0),
+                              Card(
+                                shadowColor: Colors.grey.shade50.withValues(
+                                  alpha: 0.2,
+                                ),
+                                margin: EdgeInsets.only(bottom: 17.5),
+                                color: Colors.blueGrey[50]!.withValues(
+                                  alpha: 0.2,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                ),
+                                child: Bone.text(
+                                  
+                                ),
+                              ),
+                              SizedBox(height: 15.0),
                               Expanded(
                                 child: ListView.builder(
                                   itemBuilder: (context, index) {
                                     return Card(
+                                      shadowColor: Colors.grey.shade50
+                                          .withValues(alpha: 0.2),
                                       margin: EdgeInsets.only(bottom: 17.5),
-                                      color: Colors.grey.shade300.withValues(
-                                        alpha: 0.35,
+                                      color: Colors.blueGrey[50]!.withValues(
+                                        alpha: 0.2,
                                       ),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(

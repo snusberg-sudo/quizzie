@@ -44,8 +44,8 @@ class _IpConfigPageState extends State<IpConfigPage>
               SizedBox(height: 20),
               FilledButton(
                 onPressed: () async {
-                  if (!context.mounted) return;
                   await saveIP(_ipController.text);
+                  if (!context.mounted) return;
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => AccessChoice()),

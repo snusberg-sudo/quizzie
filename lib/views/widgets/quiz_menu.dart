@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quizzie/data/providers/quiz_data_state.dart';
+import 'package:quizzie/data/providers/user_data_state.dart';
 //import 'package:quizzie/data/providers/quiz_data_state.dart';
 import 'package:quizzie/views/widgets/my_action_icon_button.dart';
 import 'package:quizzie/views/widgets/my_appbar.dart';
@@ -10,13 +12,13 @@ import 'package:quizzie/views/widgets/quiz_menu_tab.dart';
 import 'package:quizzie/views/widgets/quiz_search_bar.dart';
 
 class QuizMenu extends ConsumerWidget {
-  const QuizMenu({super.key, required this.name, required this.email});
-
-  final String? name, email;
+  const QuizMenu({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //final quizDataState = ref.watch(quizDataProvider);
+    final userDataState = ref.watch(userDataProvider);
+    final name = userDataState.user?.name;
+    final email = userDataState.user?.email;
     return NestedScrollView(
       physics: NeverScrollableScrollPhysics(),
       headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -132,7 +134,7 @@ class QuizMenu extends ConsumerWidget {
                     ),
                     child: CircleAvatar(
                       backgroundColor: Colors.white,
-                      backgroundImage: AssetImage('assets/images/851.png'),
+                      backgroundImage: AssetImage('assets/avatars/1262.png'),
                     ),
                   ),
                 ),

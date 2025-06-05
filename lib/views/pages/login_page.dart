@@ -1,23 +1,24 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quizzie/api/api_service.dart';
-import 'package:quizzie/api/user_data_storage_service.dart';
+import 'package:quizzie/data/providers/user_data_state.dart';
 import 'package:quizzie/views/pages/access_choice.dart';
 import 'package:quizzie/views/pages/layout.dart';
 import 'package:quizzie/views/styles/common_input_decoration.dart';
 import 'package:quizzie/views/widgets/outlined_logo_button.dart';
 import 'package:quizzie/views/widgets/password_field.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -26,19 +27,16 @@ class _LoginPageState extends State<LoginPage> {
       'email': emailController.text.trim(),
       'password': passwordController.text.trim(),
     };
-    final apiService = ApiService();
+    final apiService = ref.read(apiServiceProvider);
     try {
       final response = await apiService.post('/login', requestData);
-      await UserDataStorageService().set('token', response.data['token']);
-      await UserDataStorageService().set(
-        'user_id',
+      final userState = ref.read(userDataProvider.notifier);
+      await userState.saveUserData(
         response.data['user']['id'].toString(),
-      );
-      await UserDataStorageService().set(
-        'email',
+        response.data['token'],
         response.data['user']['email'],
+        response.data['user']['name']
       );
-      await UserDataStorageService().set('name', response.data['user']['name']);
       if (!mounted) return;
       Navigator.pushAndRemoveUntil(
         context,

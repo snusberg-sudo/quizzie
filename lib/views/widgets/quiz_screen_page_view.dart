@@ -9,7 +9,7 @@ class QuizScreenPageView extends StatelessWidget {
   final List<dynamic> quizQuestions;
   final List<Map<String, dynamic>> quizAnswers;
   final bool isLoading;
-  final Function(int questionId, int choiceId) onSelectAnswer;
+  final Function(int questionId, int? choiceId) onSelectAnswer;
   final Function(int newIndex) onPageChanged;
   final List alphabeticalIndex;
   final bool Function(
@@ -52,7 +52,7 @@ class QuizScreenPageView extends StatelessWidget {
                 : 0;
 
         if (!hasChoice(currentQuestionId, quizAnswers)) {
-          onSelectAnswer(currentQuestionId, -1);
+          onSelectAnswer(currentQuestionId, null);
         }
         onPageChanged(value);
       },

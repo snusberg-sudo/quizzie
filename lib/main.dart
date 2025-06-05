@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-  await dotenv.load(fileName: "assets/.env");
+  await dotenv.load(fileName: ".env");
   debugPaintSizeEnabled = false;
   runApp(ProviderScope(child: const MainApp()));
 }
