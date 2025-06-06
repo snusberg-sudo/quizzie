@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quizzie/data/providers/user_data_state.dart';
+import 'package:quizzie/views/pages/access_choice.dart';
 import 'package:quizzie/views/pages/avatar_selection.dart';
 import 'package:quizzie/views/pages/login_page.dart';
 import 'package:quizzie/views/widgets/list_view_navigation.dart';
@@ -222,7 +223,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
                                           context,
                                           animation,
                                           secondaryAnimation,
-                                        ) => LoginPage(),
+                                        ) => AccessChoice(),
                                     transitionsBuilder: (
                                       context,
                                       animation,

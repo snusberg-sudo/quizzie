@@ -35,7 +35,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         response.data['user']['id'].toString(),
         response.data['token'],
         response.data['user']['email'],
-        response.data['user']['name']
+        response.data['user']['name'],
       );
       if (!mounted) return;
       Navigator.pushAndRemoveUntil(
@@ -60,10 +60,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           padding: const EdgeInsets.only(left: 20.0),
           child: IconButton.outlined(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AccessChoice()),
-              );
+              Navigator.of(context).maybePop();
             },
             icon: FaIcon(
               FontAwesomeIcons.chevronLeft,
