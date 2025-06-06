@@ -40,4 +40,5 @@ flutter:
     - assets/lottie/
     - assets/icons/
     - assets/avatars/
+    - assets/avatars/avatars.json
     - .env
