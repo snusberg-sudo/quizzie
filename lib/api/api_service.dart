@@ -4,7 +4,7 @@ import 'package:quizzie/data/providers/user_data_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  final String? token;
+  final String? Function() getToken;
   final Dio _dio = Dio();
   bool _initialized = false;
 
@@ -13,11 +13,12 @@ class ApiService {
     return prefs.getString("ip");
   }
 
-  ApiService({required this.token}) {
+  ApiService({required this.getToken}) {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           await _ensureInitialized();
+          final token = getToken();
           if (token != null) {
             options.headers['Authorization'] = 'Bearer $token';
           }
@@ -48,9 +49,13 @@ class ApiService {
     await _ensureInitialized();
     return _dio.post(endpoint, data: data);
   }
+
+  Future<Response> patch(String endpoint, Map<String, dynamic> data) async {
+    await _ensureInitialized();
+    return _dio.patch(endpoint, data: data);
+  }
 }
 
 final apiServiceProvider = Provider<ApiService>((ref) {
-  final token = ref.watch(userDataProvider).user?.token;
-  return ApiService(token: token);
+  return ApiService(getToken: () => ref.read(userDataProvider).user?.token);
 });

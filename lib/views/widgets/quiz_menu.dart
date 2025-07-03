@@ -19,6 +19,7 @@ class QuizMenu extends ConsumerWidget {
     final userDataState = ref.watch(userDataProvider);
     final name = userDataState.user?.name;
     final email = userDataState.user?.email;
+    final avatar = userDataState.user?.avatar;
     return NestedScrollView(
       physics: NeverScrollableScrollPhysics(),
       headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -134,7 +135,7 @@ class QuizMenu extends ConsumerWidget {
                     ),
                     child: CircleAvatar(
                       backgroundColor: Colors.white,
-                      backgroundImage: AssetImage('assets/avatars/1262.png'),
+                      backgroundImage: AssetImage('assets/avatars/$avatar'),
                     ),
                   ),
                 ),

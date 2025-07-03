@@ -34,6 +34,7 @@ class QuizDataNotifier extends StateNotifier<QuizDataState> {
     try {
       final response = await apiService.get('/user/quiz-assignments');
       state = state.copyWith(items: response.data['data'], isLoading: false);
+      print(response.data['data']);
     } catch (e) {
       state = state.copyWith(error: e.toString(), isLoading: false);
     }

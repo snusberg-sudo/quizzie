@@ -36,8 +36,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         response.data['token'],
         response.data['user']['email'],
         response.data['user']['name'],
+        response.data['user']['avatar']
       );
-      if (!mounted) return;
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => Layout()),

@@ -65,6 +65,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
   @override
   Widget build(BuildContext context) {
     final userDataState = ref.read(userDataProvider.notifier);
+    final userData = ref.watch(userDataProvider);
+    final avatar = userData.user?.avatar;
     return Scaffold(
       backgroundColor: Colors.amberAccent.shade400,
       body: NestedScrollView(
@@ -114,14 +116,14 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
                               backgroundColor: Colors.white,
                               radius: 45.0,
                               backgroundImage: AssetImage(
-                                'assets/avatars/1262.png',
+                                'assets/avatars/$avatar',
                               ),
                             ),
                           ),
                         );
                       },
                       openBuilder: (context, action) {
-                        return AvatarSelection();
+                        return AvatarSelection(currentAvatar: avatar);
                       },
                     ),
                   ),
@@ -189,16 +191,19 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
                               'icon': FontAwesomeIcons.gear,
                               'text': "Settings",
                               'trailingAction': () {},
+                              'textColor': Colors.grey.shade100,
                             },
                             {
                               'icon': FontAwesomeIcons.chartSimple,
                               'text': "Statistics",
                               'trailingAction': () {},
+                              'textColor': Colors.grey.shade100,
                             },
                             {
                               'icon': FontAwesomeIcons.trophy,
                               'text': "Achievements",
                               'trailingAction': () {},
+                              'textColor': Colors.grey.shade100,
                             },
                           ],
                         ),
@@ -242,7 +247,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
                                   (Route<dynamic> route) => false,
                                 );
                               },
-                              'textColor': Colors.redAccent,
+                              'textColor': Colors.grey.shade100,
                             },
                           ],
                         ),

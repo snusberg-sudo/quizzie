@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quizzie/data/models/quiz.dart';
+import 'package:quizzie/data/providers/quiz_bottom_sheet_state.dart';
 import 'package:quizzie/data/providers/quiz_data_state.dart';
+import 'package:quizzie/data/utils/decider_for_category.dart';
 import 'package:quizzie/views/pages/quiz_confirmation.dart';
 import 'package:quizzie/views/widgets/quiz_result_mini.dart';
 import 'package:quizzie/views/pages/quiz_result_review.dart';
@@ -42,8 +44,6 @@ class QuizSliverList extends ConsumerWidget {
       );
     } else {
       List<dynamic> quizData = [];
-      String? quizTitle, quizDesc, completedAt;
-      int? quizAssignmentId, qaCount, score, quizId;
       if (quizItems.isNotEmpty) {
         quizData = quizItems;
       }
@@ -68,14 +68,11 @@ class QuizSliverList extends ConsumerWidget {
             padding: EdgeInsets.only(top: 20),
             itemCount: quizItems.isNotEmpty ? quizItems.length : 4,
             itemBuilder: (context, index) {
+              late QuizBottomSheetState quizBottomSheetState;
               if (quizData.isNotEmpty) {
-                quizId = quizData[index]['id'];
-                quizAssignmentId = quizData[index]['quiz']['id'];
-                quizTitle = quizData[index]['quiz']['title'];
-                quizDesc = quizData[index]['quiz']['description'];
-                qaCount = quizData[index]['quiz']['questions_count'];
-                completedAt = quizData[index]['completed_at'];
-                score = quizData[index]['score'];
+                quizBottomSheetState = ref.watch(
+                  quizBSSNotifierProvider(quizData[index]),
+                );
               }
               return Card(
                 shadowColor: Colors.transparent,
@@ -104,12 +101,17 @@ class QuizSliverList extends ConsumerWidget {
                           builder:
                               (context) => QuizConfirmation(
                                 quiz: Quiz(
-                                  title: quizTitle ?? '',
-                                  description: quizDesc ?? '',
-                                  questionsCount: qaCount ?? 0,
-                                  id: quizAssignmentId ?? 0,
-                                  completedAt: completedAt ?? '',
-                                  score: score ?? 0,
+                                  title: quizBottomSheetState.quizTitle ?? '',
+                                  description:
+                                      quizBottomSheetState.quizDesc ?? '',
+                                  questionsCount:
+                                      quizBottomSheetState.qaCount ?? 0,
+                                  id:
+                                      quizBottomSheetState.quizAssignmentId ??
+                                      0,
+                                  completedAt:
+                                      quizBottomSheetState.completedAt ?? '',
+                                  score: quizBottomSheetState.score ?? 0,
                                 ),
                               ),
                         )
@@ -118,8 +120,9 @@ class QuizSliverList extends ConsumerWidget {
                           MaterialPageRoute(
                             builder:
                                 (context) => QuizResultReview(
-                                  quizId: quizId ?? 0,
-                                  quizTitle: quizTitle ?? '',
+                                  quizId: quizBottomSheetState.quizId ?? 0,
+                                  quizTitle:
+                                      quizBottomSheetState.quizTitle ?? '',
                                 ),
                           ),
                         );
@@ -141,8 +144,9 @@ class QuizSliverList extends ConsumerWidget {
                               ),
                               alignment: Alignment.center,
                               child: FaIcon(
-                                FontAwesomeIcons.code,
+                                DeciderForCategory(category: quizBottomSheetState.category ?? '').decideCategory,
                                 color: Colors.indigoAccent,
+                                size: 28.0,
                               ),
                             )
                             : Bone.square(
@@ -153,7 +157,7 @@ class QuizSliverList extends ConsumerWidget {
                   title:
                       !quizDataState.isLoading
                           ? Text(
-                            quizTitle!,
+                            quizBottomSheetState.quizTitle ?? '',
                             style: GoogleFonts.rubik(
                               fontWeight: FontWeight.w600,
                               fontSize: 17.5,
@@ -164,7 +168,7 @@ class QuizSliverList extends ConsumerWidget {
                   subtitle:
                       !quizDataState.isLoading
                           ? Text(
-                            quizDesc!,
+                            quizBottomSheetState.quizDesc ?? '',
                             style: GoogleFonts.rubik(
                               color: Colors.black38,
                               fontWeight: FontWeight.w600,
@@ -176,8 +180,8 @@ class QuizSliverList extends ConsumerWidget {
                   trailing:
                       !quizDataState.isLoading
                           ? QuizResultMini(
-                            qaCount: qaCount ?? 0,
-                            score: score ?? 0,
+                            qaCount: quizBottomSheetState.qaCount ?? 0,
+                            score: quizBottomSheetState.score ?? 0,
                             mode: mode,
                           )
                           : Bone.square(
